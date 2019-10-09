@@ -7,12 +7,15 @@ function [x] = backSubs(A,b)
 %	b: Independent term
 % Outputs:
 %	x: Solution of A*x = b
-x = zeros(size(b));
+x = ones(size(b));
 [index,useless] = size(b);
-i = 0;
-while i < index
-    x(index-i)=b(index-i)-A(index-i,index-i)*x(index-i)/A(index-i,index-i);
-    i = i+1;
+x(index) = b(index)/A(index,index);
+x
+for i = index-1:-1: 1
+   x(i) = b(i) - dot(A(i,:),x)/A(i,i);
+   % x(i) = b(i)/(dot(A(i,:), x));
+   %  x(i) = b(i)/dot(A(i,:),x) 
+   x
 end
 end
 
