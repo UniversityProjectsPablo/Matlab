@@ -8,14 +8,15 @@ function [x] = backSubs(A,b)
 % Outputs:
 %	x: Solution of A*x = b
 
-x = zeros(size(b));
+x = ones(size(b));
 [index,~] = size(b);
 
 x(index) = b(index)/A(index,index);
 
     for i = index-1:-1:1
-    x(i) = (b(i)-dot(A(i,:),x))/A(i,i);  
-        disp(x);
+    C = A(i,:);
+    x(i) = b(i)/dot(C,x'); 
+    disp(x);
     end
 end
 
