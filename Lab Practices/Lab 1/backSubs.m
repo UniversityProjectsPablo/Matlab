@@ -9,14 +9,15 @@ function [x] = backSubs(A,b)
 %	x: Solution of A*x = b
 
 x = zeros(size(b));
-[index,~] = size(b);
+[index,useless] = size(b);
 sum = 0;
 
 for i = 0:1:index-1
     for j = 0:1:i
-        sum = sum + A(index-i,index-j)*x(index-j)
+        sum = sum + A(index-i,index-j)*x(index-j);
     end
-   x(index-i) = (b(index-i) - sum) / A(index-i, index-i)
+   x(index-i) = (b(index-i) - sum) / A(index-i, index-i);
+   sum = 0;
 end
 end
 
