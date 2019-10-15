@@ -11,7 +11,15 @@ function [flag, At, bt]= ownTriangulationPartialPivoting(A,b)
 %	      Flag = 1 -> The system of LE has infinite or has not a solution		 
 %	At: Upper triangular matrix
 % 	bt: Modified independent term
+[index,~] = size(b);
+At = A;
+bt = b;
+flag = 1;
 
-
-
+for i=1:1:index
+ for j=i+1:1:index
+ bt(j)=(bt(i)*At(j,i)-bt(j)*At(i,i));
+ At(j,:) = At(i,:)*At(j,i) - At(j,:)*At(i,i); 
+ end 
 end
+disp(flag);
