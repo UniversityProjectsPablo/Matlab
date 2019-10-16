@@ -8,8 +8,8 @@ function [x] = backSubs(A,b)
 % Outputs:
 %	x: Solution of A*x = b
 
-x = zeros(size(b));
-[index,~] = size(b);
+index = size(b,1); %first que get the size of the matrix
+x = zeros(1,index); %we 
 
 x(index) = b(index)/A(index,index);
 

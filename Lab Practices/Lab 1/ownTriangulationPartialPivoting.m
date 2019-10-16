@@ -32,10 +32,12 @@ for i=1:1:index
  disp(bt);
  end
 end
-flag = 0;tt
-hu¡o+'hçS..0.'¡GTR
-end
+    if A(i,i)== 0 
+    flag = 1;
+    else
+    flag = 0;    
+    end
 
-%function [x] = checkFlag(M,n)
+end
 
 %end

@@ -8,7 +8,7 @@ function [At, bt]= ownTriangulation(A,b)
 % Outputs:
 %	At: Upper triangular matrix
 % 	bt: Modified independent term
-index = size(b,1);
+[index,~] = size(b);
 At = A;
 bt = b;
 for i=1:1:index
