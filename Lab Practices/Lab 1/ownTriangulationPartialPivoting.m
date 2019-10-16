@@ -16,6 +16,7 @@ At = A;
 bt = b;
 for i=1:1:index
  for j=i+1:1:index
+    %if the pivot is too small we change rows to have a better pivot
     if (At(i,i) > -1e-8)&&(At(i,i)<1e-8)
         auxA = At(i,:);
         auxb = bt(i);
@@ -26,6 +27,7 @@ for i=1:1:index
         At(a,:) = auxA;
         bt(a) = auxb;
     end
+ %if we have a better pivot we find the result we need and find the others
  bt(j)=(bt(i)*At(j,i)-bt(j)*At(i,i));
  At(j,:) = At(i,:)*At(j,i) - At(j,:)*At(i,i);
  disp(At);
@@ -39,5 +41,3 @@ end
     end
 
 end
-
-%end

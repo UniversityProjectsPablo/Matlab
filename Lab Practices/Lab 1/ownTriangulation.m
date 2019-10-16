@@ -8,15 +8,14 @@ function [At, bt]= ownTriangulation(A,b)
 % Outputs:
 %	At: Upper triangular matrix
 % 	bt: Modified independent term
-index = size(b,1);
+index = size(b,1); %we find how many rows we have to triangulate
 At = A;
 bt = b;
     for i=1:1:index
         for j=i+1:1:index
         bt(j)=(bt(i)*At(j,i)-bt(j)*At(i,i));
         At(j,:) = At(i,:)*At(j,i) - At(j,:)*At(i,i);
-        disp(At);
-        disp(bt);
+        %by multiplying we iteratively find the other results
         end
     end
 end
