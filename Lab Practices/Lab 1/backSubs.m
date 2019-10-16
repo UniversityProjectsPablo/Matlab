@@ -15,7 +15,7 @@ x(index) = b(index)/A(index,index);
 
     for i = index-1:-1:1
     x(i) = (b(i)-dot(A(i,:),x))/A(i,i);  
-        disp(x);
+    disp(x);
     end
 end
 
