@@ -32,7 +32,7 @@ for i=1:1:index
  disp(bt);
  end
 end
-    if A(i,i)== 0 
+    if At(i,i)== 0 
     flag = 1;
     else
     flag = 0;    

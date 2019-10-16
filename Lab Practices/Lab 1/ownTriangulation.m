@@ -11,11 +11,12 @@ function [At, bt]= ownTriangulation(A,b)
 index = size(b,1);
 At = A;
 bt = b;
-for i=1:1:index
- for j=i+1:1:index
- bt(j)=(bt(i)*At(j,i)-bt(j)*At(i,i));
- At(j,:) = At(i,:)*At(j,i) - At(j,:)*At(i,i);
- disp(At);
- disp(bt);
- end
+    for i=1:1:index
+        for j=i+1:1:index
+        bt(j)=(bt(i)*At(j,i)-bt(j)*At(i,i));
+        At(j,:) = At(i,:)*At(j,i) - At(j,:)*At(i,i);
+        disp(At);
+        disp(bt);
+        end
+    end
 end
