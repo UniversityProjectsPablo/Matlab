@@ -13,7 +13,7 @@ u = u/sqrt(u'*u);
         u(3), 0, -u(1);
         -u(2) u(1) 0];
 
-R = eye(3)*cosd(a) + (1 - cosd(a))*(u *u') + ux*sind(a);
+R = eye(3)*cos(a) + (1 - cos(a))*(u *u') + ux*sin(a);
 
 end
 
