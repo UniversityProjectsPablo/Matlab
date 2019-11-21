@@ -7,9 +7,17 @@ function [R] = eAngles2rotM(yaw, pitch, roll)
 %	roll: angle of rotation around the x axis
 % Outputs:
 %	R: rotation matrix
-R = [cos(pitch)*cos(yaw), cos(yaw)*sin(pitch)*sin(roll)-cos(roll)*sin(yaw), cos(yaw)*cos(roll)*sin(pitch)+ sin(yaw)*sin(roll);
-    cos(pitch)*sin(yaw), sin(yaw)*sin(pitch)*sin(roll)+cos(roll)*sin(yaw), sin(yaw)*sin(pitch)*cos(roll)- cos(yaw)*sin(roll);
-    -sin(pitch), cos(pitch)*sin(roll), cos(pitch)*cos(roll)];
+sin_pitch = sin(pitch);
+sin_roll = sin(roll);
+sin_yaw = sin(yaw);
+
+cos_pitch = cos(pitch);
+cos_roll = cos(roll);
+cos_yaw = cos(yaw);
+
+R = [cos_pitch * cos_yaw, cos_yaw*sin_pitch*sin_roll-cos_roll*sin_yaw, cos_yaw*cos_roll*sin_pitch + sin_yaw*sin_roll;
+    cos_pitch*sin_yaw, sin_yaw*sin_pitch*sin_roll+cos_roll*cos_yaw, sin_yaw*sin_pitch*cos_roll- cos_yaw*sin_roll;
+    -sin_pitch, cos_pitch*sin_roll, cos_pitch*cos_roll];
 end
 
 
