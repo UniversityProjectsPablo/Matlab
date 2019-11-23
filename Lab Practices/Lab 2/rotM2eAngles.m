@@ -16,7 +16,7 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
       pitch = pi* 0.5;
       roll = 0;
       yaw = 1 - R(2,2);
-    elseif -R(3,1) == 0
+    elseif round(R(3,1),6) == 0
        pitch = pi;
        roll = atan2(R(3,2)/cos(pitch), R(3,3)/cos(pitch));
        yaw = atan2(R(2,1)/cos(pitch), R(1,1)/cos(pitch));
