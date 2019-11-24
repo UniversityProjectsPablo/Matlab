@@ -8,11 +8,11 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
 %	pitch: angle of rotation around the y axis
 %	roll: angle of rotation around the x axis
 
-    if  R(3,1) == 1
+    if round(R(3,1),6) == 1
       pitch = pi * 1.5;
       roll = 0;
       yaw = R(2,2) -1;
-    elseif R(3,1) == -1
+    elseif round(R(3,1),6) == -1
       pitch = pi* 0.5;
       roll = 0;
       yaw = 1 - R(2,2);
