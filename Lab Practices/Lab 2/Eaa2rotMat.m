@@ -12,7 +12,7 @@ u = u/sqrt(u'*u);
 [ux] = [0, -u(3), u(2);
         u(3), 0, -u(1);
         -u(2) u(1) 0];
-
+%using the Rodrigues formula we can find the rotation matrix
 R = eye(3)*cos(a) + (1 - cos(a))*(u *u') + ux*sin(a);
 
 end

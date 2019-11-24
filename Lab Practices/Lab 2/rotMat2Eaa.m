@@ -7,11 +7,14 @@ function [a,u] = rotMat2Eaa(R)
 %	a: angle of rotation
 %	u: axis of rotation 
 
-a = acos((trace(R)-1)/2);
-    if R == eye(3)
-    u = (rand(3,1)-.5);
-    elseif sin(a) == 0
-    ux2 = (R - R')/(2*sin(a));
+    a = acos((trace(R)-1)/2);
+    if round(sin(a),5) == 0
+        if a == pi
+         ux = (R - eye(3)) / 2;
+         u = [ux(3,2), ux(1,3),ux(2,1)];
+        elseif a == 0
+         u = (rand(3,1)-.5);
+        end
     else
     ux = (R - R')/(2*sin(a));
     u = [ux(3,2), ux(1,3),ux(2,1)];
