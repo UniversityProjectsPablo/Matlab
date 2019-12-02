@@ -22,7 +22,7 @@ function varargout = Exercise3(varargin)
 
 % Edit the above text to modify the response to help Exercise3
 
-% Last Modified by GUIDE v2.5 02-Dec-2019 19:19:59
+% Last Modified by GUIDE v2.5 02-Dec-2019 20:10:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -84,19 +84,30 @@ function slider2_Callback(hObject, eventdata, handles)
 set(handles.slider2, 'Min', 0);
 set(handles.slider2, 'Max', 360);
 set(handles.slider2, 'SliderStep', [1,1]);
+
 angle = get(handles.slider2, 'Value');
-set(handles.u_2_et,'String', sliderValue);
-u = zeros(3);
+set(handles.angle_text,'String', num2str(angle));
+u = zeros(1,3);
 u(1) = str2double(get(handles.u_1_et,('String')));
 u(2) = str2double(get(handles.u_2_et,('String')));
-u(1) = str2double(get(handles.u_3_et,('String')));
+u(3) = str2double(get(handles.u_3_et,('String')));
 
 v(1) = str2double(get(handles.v_1_et,('String')));
 v(2) = str2double(get(handles.v_2_et,('String')));
-v(1) = str2double(get(handles.v_3_et,('String')));
+v(3) = str2double(get(handles.v_3_et,('String')));
 
-%set(handles.axes_1, 
-[u] = quaternionRotation(u, angle, v);
+quiver3(0,0,0,1,0,0);
+hold on;
+quiver3(0,0,0,0,1,0);
+hold on;
+quiver3(0,0,0,0,0,1);
+%quiver3(handles.graphic, X,Y,Z);
+hold on;
+[n] = quaternionRotation(u, angle, v);
+quiver3(0,0,0,n);
+ 
+%quiver3(0,0,0,1,1,1);
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -249,7 +260,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 function [n] = quaternionRotation(u,a,v)
- %first we normalize the vector and the axis
+%first we normalize the vector and the axis
 v = v/sqrt(v' * v);
 u = u/sqrt(u' * u);
 %then we transform the angle from degrees to radians 
@@ -261,3 +272,12 @@ qc = [q(1), -u];
 
 n = q*v*c;
     
+
+
+% --- Executes during object creation, after setting all properties.
+function graphic_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to graphic (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate graphic
