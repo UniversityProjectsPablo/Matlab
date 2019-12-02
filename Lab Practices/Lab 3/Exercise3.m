@@ -96,15 +96,18 @@ v(1) = str2double(get(handles.v_1_et,('String')));
 v(2) = str2double(get(handles.v_2_et,('String')));
 v(3) = str2double(get(handles.v_3_et,('String')));
 
-quiver3(0,0,0,1,0,0);
+%quiver3(0,0,0,1,0,0);
+x = [1,0,0];
+y = [0,1,0];
+z = [0,1,0];
+plot3(x,y,z, 'LineWidth',2);
 hold on;
-quiver3(0,0,0,0,1,0);
+plot3(x,y,z, 'LineWidth',2);
 hold on;
-quiver3(0,0,0,0,0,1);
-%quiver3(handles.graphic, X,Y,Z);
+plot3(x,y,z,'LineWidth',2);
 hold on;
 [n] = quaternionRotation(u, angle, v);
-quiver3(0,0,0,n);
+%quiver3(0,0,0,n);
  
 %quiver3(0,0,0,1,1,1);
 
