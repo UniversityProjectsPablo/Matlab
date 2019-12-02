@@ -350,7 +350,7 @@ end
 
 
 
-function qa_q0_Callback(hObject, eventdata, handles)
+function qa_q0_Callback(~, eventdata, handles)
 % hObject    handle to qa_q0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -373,7 +373,7 @@ end
 
 
 
-function qa_q1_Callback(hObject, eventdata, handles)
+function qa_q1_Callback(hObject, ~, handles)
 % hObject    handle to qa_q1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -396,7 +396,7 @@ end
 
 
 
-function qa_q2_Callback(hObject, eventdata, handles)
+function qa_q2_Callback(~, ~, ~)
 % hObject    handle to qa_q2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -406,7 +406,7 @@ function qa_q2_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function qa_q2_CreateFcn(hObject, eventdata, handles)
+function qa_q2_CreateFcn(hObject, ~, ~)
 % hObject    handle to qa_q2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
@@ -441,7 +441,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 % --- Executes on button press in Button.
-function Button_Callback(hObject, eventdata, handles)
+function Button_Callback(~, ~, handles)
 % hObject    handle to Button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

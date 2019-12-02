@@ -22,7 +22,7 @@ function varargout = Exercise3(varargin)
 
 % Edit the above text to modify the response to help Exercise3
 
-% Last Modified by GUIDE v2.5 02-Dec-2019 17:28:53
+% Last Modified by GUIDE v2.5 02-Dec-2019 19:19:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,11 +81,22 @@ function slider2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-set(handles.slider2, 'Max', 2 * pi);
 set(handles.slider2, 'Min', 0);
+set(handles.slider2, 'Max', 360);
 set(handles.slider2, 'SliderStep', [1,1]);
-sliderValue = get(handles.slider2, 'Value');
+angle = get(handles.slider2, 'Value');
 set(handles.u_2_et,'String', sliderValue);
+u = zeros(3);
+u(1) = str2double(get(handles.u_1_et,('String')));
+u(2) = str2double(get(handles.u_2_et,('String')));
+u(1) = str2double(get(handles.u_3_et,('String')));
+
+v(1) = str2double(get(handles.v_1_et,('String')));
+v(2) = str2double(get(handles.v_2_et,('String')));
+v(1) = str2double(get(handles.v_3_et,('String')));
+
+%set(handles.axes_1, 
+[u] = quaternionRotation(u, angle, v);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -236,3 +247,17 @@ function u_3_et_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+function [n] = quaternionRotation(u,a,v)
+ %first we normalize the vector and the axis
+v = v/sqrt(v' * v);
+u = u/sqrt(u' * u);
+%then we transform the angle from degrees to radians 
+a = (a * pi)/180;
+u = cos(a * 0.5) * u;
+%then we create the quaternion using the axis and the angle
+q = [cos(a * 0.5) , u];
+qc = [q(1), -u];
+
+n = q*v*c;
+    
