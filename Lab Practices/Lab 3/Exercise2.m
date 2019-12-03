@@ -127,11 +127,12 @@ function slider1_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-set(handles.slider1, 'Min', -100000);
-set(handles.slider1, 'Max', 100000);
+set(handles.slider1, 'Min', -100);
+set(handles.slider1, 'Max', 100);
 set(handles.slider1, 'SliderStep', [1,1]);
 
 velocity = get(handles.slider1, 'Value');
+set(handles.velocity_text,'String',num2str(velocity));
 
 % --- Executes during object creation, after setting all properties.
 function slider1_CreateFcn(hObject, eventdata, handles)
@@ -157,7 +158,8 @@ set(handles.slider2, 'Min', 0);
 set(handles.slider2, 'Max', 360);
 set(handles.slider2, 'SliderStep', [1,1]);
 
-angle = get(handles.slider1, 'Value');
+angle = get(handles.slider2, 'Value');
+set(handles.angle_text,'String',num2str(angle));
 
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
