@@ -189,8 +189,11 @@ initial_y = str2double(get(handles.y_edit,'String'));
 velocity = get(handles.slider1, 'Value');
 angle = get(handles.slider2, 'Value');
 
-t = 1;
+t = [1:1:10];
 
 x = initial_x + t * velocity * cosd(angle);
 y = initial_y + t * velocity * sind(angle) - (1/2 * -9.81 * t * t);
+plot(x,y);
+hold on;
+
 %plot(initial_x,initial_y);
