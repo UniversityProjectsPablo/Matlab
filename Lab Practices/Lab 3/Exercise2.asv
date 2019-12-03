@@ -154,12 +154,7 @@ function slider2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-set(handles.slider2, 'Min', 0);
-set(handles.slider2, 'Max', 360);
-set(handles.slider2, 'SliderStep', [1,1]);
 
-angle = get(handles.slider2, 'Value');
-set(handles.angle_text,'String',sprintf('Angle: %.1f', angle));
 
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
@@ -186,9 +181,10 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 initial_x = str2double(get(handles.x_edit,'String'));
 initial_y = str2double(get(handles.y_edit,'String'));
 
-velocity = get(handles.slider1, 'Value');
-angle = get(handles.slider2, 'Value');
+set(handles.slider2, 'Min', 0);
+set(handles.slider2, 'Max', 360);
+set(handles.slider2, 'SliderStep', [1,1]);
 
-x = initial_x;
-y = initial_y;
+angle = get(handles.slider2, 'Value');
+set(handles.angle_text,'String',sprintf('Angle: %.1f', angle));
 %plot(initial_x,initial_y);
