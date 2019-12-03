@@ -86,7 +86,7 @@ set(handles.slider2, 'Max', 360);
 set(handles.slider2, 'SliderStep', [1,1]);
 
 angle = get(handles.slider2, 'Value');
-set(handles.angle_text,'String',sprintf('Velocity: %.1f', angle));
+set(handles.angle_text,'String',sprintf('Angle: %.1f', angle));
 u = zeros(3,1);
 u(1) = str2double(get(handles.u_1_et,('String')));
 u(2) = str2double(get(handles.u_2_et,('String')));
