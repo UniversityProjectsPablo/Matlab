@@ -101,7 +101,11 @@ v(3) = str2double(get(handles.v_3_et,('String')));
 x = [1,0,0];
 y = [0,1,0];
 z = [0,0,1];
-plot3(x,y,z, 'LineWidth',2);
+plot3(x, 'LineWidth',2);
+hold on;
+plot3(y, 'LineWidth',2);
+hold on;
+plot3(z, 'LineWidth',2);
 hold on;
 
 [n] = quaternionRotation(u, angle, v);
