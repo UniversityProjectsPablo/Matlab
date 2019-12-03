@@ -87,11 +87,12 @@ set(handles.slider2, 'SliderStep', [1,1]);
 
 angle = get(handles.slider2, 'Value');
 set(handles.angle_text,'String',sprintf('Velocity: %.1f', angle));
-u = zeros(1,3);
+u = zeros(3,1);
 u(1) = str2double(get(handles.u_1_et,('String')));
 u(2) = str2double(get(handles.u_2_et,('String')));
 u(3) = str2double(get(handles.u_3_et,('String')));
 
+v = zeros(3,1);
 v(1) = str2double(get(handles.v_1_et,('String')));
 v(2) = str2double(get(handles.v_2_et,('String')));
 v(3) = str2double(get(handles.v_3_et,('String')));
@@ -260,16 +261,20 @@ end
 
 function [n] = quaternionRotation(u,a,v)
 %first we normalize the vector and the axis
-v = v/sqrt(v' * v);
-u = u/sqrt(u' * u);
+v = v/sqrt(v' * v)
+u = u/sqrt(u' * u)
 %then we transform the angle from degrees to radians 
-a = (a * pi)/180;
-u = cos(a * 0.5) * u;
+a = (a * pi)/180
+u = cos(a * 0.5) * u
 %then we create the quaternion using the axis and the angle
-q = [cos(a * 0.5) , u];
-qc = [q(1), -u];
-
-n = q*v*c;
+q = zeros(4,1);
+qc = zeros(4,1);
+q(1) = cos(a * 0.5);
+q(2:4) = u;
+qc(1) = q(1);
+qc(2:4) = -u;
+n = q 
+n
     
 
 
