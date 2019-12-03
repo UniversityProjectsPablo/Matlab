@@ -458,13 +458,15 @@ qb(3) = str2double(get(handles.qb_q2, 'String'));
 qb(4) = str2double(get(handles.qb_q3, 'String'));
 
 qc = QuaternionMultiplication(qa,qb);
-set(handles.qc_q0, 'String', num2str(qc(1)));
-set(handles.qc_q1, 'String', num2str(qc(2)));
-set(handles.qc_q2, 'String', num2str(qc(3)));
-set(handles.qc_q3, 'String', num2str(qc(4)));
+qc
+set(handles.qc_q0, 'String', num2string(qc(1)));
+set(handles.qc_q1, 'String', num2string(qc(2)));
+set(handles.qc_q2, 'String', num2string(qc(3)));
+set(handles.qc_q3, 'String', num2string(qc(4)));
 
 
 function qc = QuaternionMultiplication(qa,qb)
 qc = zeros(4,1);
 qc(1) = qa(1) * qc(1) - (qa(2:4)' * qb(2:4));
-qc(2:4) = qa(1)*qb(2:4) + qb(1)*qa(2:4) + cross(qa(2:4), qb(2:4));
+qc(2:4) = 
+qc
