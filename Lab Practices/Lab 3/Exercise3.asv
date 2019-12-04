@@ -81,21 +81,31 @@ function slider2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+%previous adjustements
 set(handles.slider2, 'Min', 0);
 set(handles.slider2, 'Max', 360);
 set(handles.slider2, 'SliderStep', [1,1]);
 
+set(handles.graphic,'xtick',[]);
+set(handles.graphic,'ytick',[]);
+set(handles.graphic,'ztick',[]);
+set(handles.graphic,'visible','off');
+
 angle = get(handles.slider2, 'Value');
 set(handles.angle_text,'String',sprintf('Angle: %.1f', angle));
+
 u = zeros(3,1);
 u(1) = str2double(get(handles.u_1_et,('String')));
 u(2) = str2double(get(handles.u_2_et,('String')));
 u(3) = str2double(get(handles.u_3_et,('String')));
+u = u/sqrt(u' * u);
 
 v = zeros(3,1);
 v(1) = str2double(get(handles.v_1_et,('String')));
 v(2) = str2double(get(handles.v_2_et,('String')));
 v(3) = str2double(get(handles.v_3_et,('String')));
+v = v/sqrt(v' * v);
 
 % x axis
 plot3([0 1],[0 0],[0 0],'Color','red','LineWidth', 2);
@@ -106,12 +116,12 @@ hold on;
 % z axis
 plot3([0 0],[0 0],[0 1],'Color','yellow','LineWidth', 2);
 hold on;
-[n] = quaternionRotation(u, angle, v);
-% rotated vector
-plot3([0 n(1)],[0 n(2)],[0 n(3)],'Color','cyan','LineWidth', 2);
+% rotation axis
+plot3([0 u(1)],[0 u(2)], [0 u(3)], 'Color', 'black', 'LineWidth',2);
 hold on 
-plot3([0 u])
-axes('Color','none','XColor','none');
+%calculation of rotated vector and plot
+[n] = quaternionRotation(u, angle, v);
+plot3([0 n(1)],[0 n(2)],[0 n(3)],'Color','cyan','LineWidth', 2);
 
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
@@ -263,23 +273,28 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 function [n] = quaternionRotation(u,a,v)
-%first we normalize the vector and the axis
-v = v/sqrt(v' * v)
-u = u/sqrt(u' * u)
-%then we transform the angle from degrees to radians 
-a = (a * pi)/180
-u = cos(a * 0.5) * u
-%then we create the quaternion using the axis and the angle
+%we create the quaternion using the axis and the angle
 q = zeros(4,1);
 qc = zeros(4,1);
-q(1) = cos(a * 0.5);
-q(2:4) = u;
+v_q = zeros(4,1);
+n = zeros(4,1);
+q(1) = cosd(a * 0.5);
+q(2:4) = sind(a*0.5)*u;
 qc(1) = q(1);
-qc(2:4) = -u;
-n = q(2:4);
-n = n/sqrt(n'*n);
-n
-    
+qc(2:4) = -q(2:4);
+v_q(1) = 0;
+v_q(2:4) = v;
+n=QuaternionMultiplication(q,v_q);
+n = QuaternionMultiplication(n,qc);
+n = n(2:4);
+n = n/sqrt(n' * v);
+
+function qc = QuaternionMultiplication(qa,qb)
+qc = zeros(4,1);
+qc(1) = qa(1) * qc(1);
+qc(2:4) = - (qa(2:4)' * qb(2:4));
+qc(2:4) = qa(1)*qb(2:4) + qb(1)*qa(2:4) + cross(qa(2:4), qb(2:4));
+
 
 
 % --- Executes during object creation, after setting all properties.

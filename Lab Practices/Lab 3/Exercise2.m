@@ -203,6 +203,8 @@ for t = 1:1:15
 end
 
 plot(x,y);
+xlabel('x [m]');
+ylabel('y [m]')
 hold on;
 
 %We print range and max height
