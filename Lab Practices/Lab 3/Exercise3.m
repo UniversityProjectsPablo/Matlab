@@ -91,29 +91,27 @@ u = zeros(3,1);
 u(1) = str2double(get(handles.u_1_et,('String')));
 u(2) = str2double(get(handles.u_2_et,('String')));
 u(3) = str2double(get(handles.u_3_et,('String')));
+u = u/sqrt(u' * u);
 
 v = zeros(3,1);
 v(1) = str2double(get(handles.v_1_et,('String')));
 v(2) = str2double(get(handles.v_2_et,('String')));
 v(3) = str2double(get(handles.v_3_et,('String')));
 
-%quiver3(0,0,0,1,0,0);
-origin = [0,0,0];
-x = [1,0,0];
-y = [0,1,0];
-z = [0,0,1];
+% x axis
 plot3([0 1],[0 0],[0 0],'Color','red','LineWidth', 2);
 hold on;
-plot3([0 0],[0 1],[0 0],'Color','green','LineWidth', 2);
+% y axis
+plot3([0 0],[0 1],[0 0],'Color','blue','LineWidth', 2);
 hold on;
-plot3([0 0],[0 0],[0 1],'Color','blue','LineWidth', 2);
+% z axis
+plot3([0 0],[0 0],[0 1],'Color','yellow','LineWidth', 2);
 hold on;
 [n] = quaternionRotation(u, angle, v);
-plot3([0 n(2)],[0 n(3)],[0 n(4)],'Color','cyan','LineWidth', 2);
-%quiver3(0,0,0,n);
- 
-
-
+% rotated vector
+plot3([0 n(1)],[0 n(2)],[0 n(3)],'Color','cyan','LineWidth', 2);
+hold on 
+plot3([0 u(1)],[0 u(2)], [0 u(3)], 'Color', 'black', 'LineWidth',2);
 
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
@@ -278,7 +276,8 @@ q(1) = cos(a * 0.5);
 q(2:4) = u;
 qc(1) = q(1);
 qc(2:4) = -u;
-n = q 
+n = q(2:4);
+n = n/sqrt(n'*n);
 n
     
 
