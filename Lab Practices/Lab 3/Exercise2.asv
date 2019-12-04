@@ -189,19 +189,14 @@ initial_y = str2double(get(handles.y_edit,'String'));
 velocity = get(handles.slider1, 'Value');
 angle = get(handles.slider2, 'Value');
 
-%t = [1:1:10];
+t = [1:1:10];
 
-for t = 1:1:10
 x = initial_x + t * velocity * cosd(angle);
 y = initial_y + t * velocity * sind(angle) - (1/2 * -9.81 * t * t);
+
+for t = 1:1:10;
 end
-
-
 plot(x,y);
 hold on;
-
-% Calculate and print the range
-range = x;
-set(handles.range_text, 'String',sprintf('Range: %.1f', range));
 
 %plot(initial_x,initial_y);
