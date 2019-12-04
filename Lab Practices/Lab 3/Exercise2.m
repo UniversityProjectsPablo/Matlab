@@ -190,10 +190,14 @@ velocity = get(handles.slider1, 'Value');
 angle = get(handles.slider2, 'Value');
 
 %t = [1:1:10];
+max_height = initial_y;
 
 for t = 1:1:10
-x = initial_x + t * velocity * cosd(angle);
-y = initial_y + t * velocity * sind(angle) - (0.5 * -9.81 * t * t);
+    x(t) = initial_x + t * velocity * cosd(angle);
+    y(t) = initial_y + t * velocity * sind(angle) - (0.5 * 9.81 * t * t);
+    if max_height < y
+        max_height = y;
+    end
 end
 
 
