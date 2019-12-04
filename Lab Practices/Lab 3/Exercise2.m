@@ -191,6 +191,7 @@ angle = get(handles.slider2, 'Value');
 
 range = initial_x;
 max_height = initial_y;
+max_height_x = 0;
 for t = 1:1:15
     x(t) = initial_x + t * velocity * cosd(angle);
     y(t) = initial_y + t * velocity * sind(angle) - (0.5 * 9.81 * t * t);
@@ -199,10 +200,12 @@ for t = 1:1:15
     end
     if max_height < y(t)
         max_height = y(t);
+        max_height_x = x(t);
     end
 end
 
 plot(x,y);
+plot(max_height_x, max_height,'.');
 xlabel('x [m]');
 ylabel('y [m]')
 hold on;

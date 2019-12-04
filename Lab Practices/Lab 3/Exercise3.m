@@ -84,18 +84,11 @@ function slider2_Callback(hObject, eventdata, handles)
 
 %previous adjustements
 %slider
-set(handles.slider2, 'Min', 0);
-set(handles.slider2, 'Max', 360);
-set(handles.slider2, 'SliderStep', [1,1]);
+set(handles.slider2, 'Min', -180);
+set(handles.slider2, 'Max', 180);
+set(handles.slider2, 'SliderStep', [0.1,0.15]);
 
 %plot
-set(handles.graphic,'xtick',[]);
-set(handles.graphic,'ytick',[]);
-set(handles.graphic,'ztick',[]);
-set(handles.graphic,'visible','off');
-set(handles.graphic,'XDir', 'reverse');
-set(handles.graphic,'YDir', 'reverse');
-
 angle = get(handles.slider2, 'Value');
 set(handles.angle_text,'String',sprintf('Angle: %.1f', angle));
 
@@ -122,8 +115,14 @@ plot3([0 0],[0 0],[0 1],'Color','yellow','LineWidth', 2);
 plot3([0 u(1)],[0 u(2)], [0 u(3)], 'Color', 'black', 'LineWidth',2);
 %calculation of rotated vector and plot
 [n] = quaternionRotation(u, angle, v);
-n
 plot3([0 n(1)],[0 n(2)],[0 n(3)],'Color','cyan','LineWidth', 2);
+
+set(handles.graphic,'xtick',[]);
+set(handles.graphic,'ytick',[]);
+set(handles.graphic,'ztick',[]);
+set(handles.graphic,'visible','off');
+set(handles.graphic,'XDir', 'reverse');
+set(handles.graphic,'YDir', 'reverse');
 
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
