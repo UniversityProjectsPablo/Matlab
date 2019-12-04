@@ -127,8 +127,8 @@ function slider1_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-set(handles.slider1, 'Min', -100);
-set(handles.slider1, 'Max', 100);
+set(handles.slider1, 'Min', 0);
+set(handles.slider1, 'Max', 200);
 set(handles.slider1, 'SliderStep', [1,1]);
 
 velocity = get(handles.slider1, 'Value');
@@ -189,11 +189,14 @@ initial_y = str2double(get(handles.y_edit,'String'));
 velocity = get(handles.slider1, 'Value');
 angle = get(handles.slider2, 'Value');
 
-%t = [1:1:10];
+range = initial_x;
 max_height = initial_y;
 for t = 1:1:15
     x(t) = initial_x + t * velocity * cosd(angle);
     y(t) = initial_y + t * velocity * sind(angle) - (0.5 * 9.81 * t * t);
+    if range < x(t)
+        range = x(t);
+    end
     if max_height < y(t)
         max_height = y(t);
     end
@@ -202,8 +205,6 @@ end
 plot(x,y);
 hold on;
 
-% Calculate and print the range
-range = x;
-set(handles.range_text, 'String',sprintf('Range: %.1f m', range));
-% Calculate and print the max height
-set(handles.max_height_text, 'String',sprintf('Max height: %.1f m', max_height));
+%We print range and max height
+set(handles.range_text, 'String',sprintf('Range: %.2f m', range));
+set(handles.max_height_text, 'String',sprintf('Max height: %.2f m', max_height));
