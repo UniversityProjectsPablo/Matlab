@@ -191,22 +191,19 @@ angle = get(handles.slider2, 'Value');
 
 %t = [1:1:10];
 max_height = initial_y;
-
-for t = 1:1:10
+for t = 1:1:15
     x(t) = initial_x + t * velocity * cosd(angle);
     y(t) = initial_y + t * velocity * sind(angle) - (0.5 * 9.81 * t * t);
-    if max_height < y
-        max_height = y;
+    if max_height < y(t)
+        max_height = y(t);
     end
 end
-
 
 plot(x,y);
 hold on;
 
 % Calculate and print the range
 range = x;
-set(handles.range_text, 'String',sprintf('Range: %.1f', range));
+set(handles.range_text, 'String',sprintf('Range: %.1f m', range));
 % Calculate and print the max height
-max_height = y;
-set(handles.max_height_text, 'String',sprintf('Max height: %.1f', max_height));
+set(handles.max_height_text, 'String',sprintf('Max height: %.1f m', max_height));
