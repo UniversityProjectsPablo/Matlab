@@ -106,13 +106,19 @@ v = v/sqrt(v' * v);
 
 % x axis
 plot3([0 1],[0 0],[0 0],'Color','blue','LineWidth', 2);
+axis equal;
 hold on;
+xlim([-1 1]);
+ylim([-1 1]);
+zlim([-1 1]);
 % y axis
 plot3([0 0],[0 1],[0 0],'Color','red','LineWidth', 2);
+hold on;
 % z axis
 plot3([0 0],[0 0],[0 1],'Color','yellow','LineWidth', 2);
+hold on;
 % rotation axis
-plot3([0 u(1)],[0 u(2)], [0 u(3)], 'Color', 'black', 'LineWidth',2);
+%plot3([0 u(1)],[0 u(2)], [0 u(3)], 'Color', 'black', 'LineWidth',2);
 %calculation of rotated vector and plot
 [n] = quaternionRotation(u, angle, v);
 plot3([0 n(1)],[0 n(2)],[0 n(3)],'Color','cyan','LineWidth', 2);
