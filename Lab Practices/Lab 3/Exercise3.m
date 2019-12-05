@@ -124,6 +124,8 @@ set(handles.graphic,'visible','off');
 set(handles.graphic,'XDir', 'reverse');
 set(handles.graphic,'YDir', 'reverse');
 
+hold off;
+
 % --- Executes during object creation, after setting all properties.
 function slider2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to slider2 (see GCBO)
