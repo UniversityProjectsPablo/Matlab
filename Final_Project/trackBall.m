@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 24-Dec-2019 18:23:52
+% Last Modified by GUIDE v2.5 24-Dec-2019 18:30:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -303,3 +303,38 @@ function rotation_vector_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in quaternions_button.
+function quaternions_button_Callback(hObject, eventdata, handles)
+% hObject    handle to quaternions_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in euler_angle_axis_button.
+function euler_angle_axis_button_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_angle_axis_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in euler_angles_button.
+function euler_angles_button_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_angles_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in rotation_vector_button.
+function rotation_vector_button_Callback(hObject, eventdata, handles)
+% hObject    handle to rotation_vector_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in general_reset_button.
+function general_reset_button_Callback(hObject, eventdata, handles)
+% hObject    handle to general_reset_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
