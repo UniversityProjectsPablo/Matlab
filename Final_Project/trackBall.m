@@ -43,7 +43,6 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-
 % --- Executes just before trackBall is made visible.
 function trackBall_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
@@ -99,6 +98,7 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     % TODO: From here we should call "Calculate m"
+    m = calculateM([xmouse; ymouse]);
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 else
     % Mouse is outside of viewport
@@ -109,6 +109,10 @@ function my_MouseReleaseFcn(obj,event,hObject)
 handles=guidata(hObject);
 set(handles.figure1,'WindowButtonMotionFcn','');
 guidata(hObject,handles);
+
+mousepos=get(handles.axes1,'CurrentPoint');
+xmouse = mousepos(1,1);
+ymouse = mousepos(1,2);
 
 function my_MouseMoveFcn(obj,event,hObject)
 
@@ -341,3 +345,25 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % hObject    handle to general_reset_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+%Functions
+
+function [new_m] = calculateM(m)
+x = m(1,1);
+y = m(2,1);
+r = sqrt(2);
+
+if x*x + y*y < 0.5*r*r
+    z = sqrt(r*r - x*x -y*y)';
+else
+    z = (r*r)/(2*sqrt(x*x + y*y));
+    z = (r*r/sqrt(x*x + y*y))
+end
+
+new_m = [x;y,;z];
+
+
+
+
