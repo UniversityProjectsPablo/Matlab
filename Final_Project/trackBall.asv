@@ -99,6 +99,7 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     % TODO: From here we should call "Calculate m"
     m = calculateM([xmouse; ymouse]);
+    getGlobal_m0(m0);
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 else
     % Mouse is outside of viewport
@@ -347,7 +348,6 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-
 %Functions
 
 function [new_m] = calculateM(m)
@@ -364,6 +364,35 @@ end
 
 new_m = [x;y,;z];
 
+function q = quaternionFromVectors(m0,m)
+normalization  = sqrt(norm(m0) * norm(m));
+cos_theta = dot(m0,m)/normalization;
+half_cos = sqrt(0.5 * (1+cos_theta));
+u = cross(m0,m)/(normalization * 2 * half_cos);
+q = [half_cos; u];
+
+function dq = deltaQuaternion(q,q0)
+q0c = [q0(1); -q0(2:4)];
+
+function qp = quaternionMultiplication(q,p)
+qp = zeros(4,1);
+qp(1) = q(1)*p(1) - q(2:4)'*p(2:4);
+qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
 
 
+function setGlobal_m0(m)
+global mo
+mo=m;
+
+function setGlobal_q0(q)
+global q0
+q0 = q;
+
+function m = getGlobal_m0
+global m0
+m = m0;
+
+function q = getGlobal_q0
+global q0
+q = q0;
 
