@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 24-Dec-2019 18:30:41
+% Last Modified by GUIDE v2.5 27-Dec-2019 18:04:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -98,8 +98,14 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     % TODO: From here we should call "Calculate m"
-    m = calculateM([xmouse; ymouse]);
-    getGlobal_m0(m0);
+    m_original = load('m0.mat');
+    m0(1) = m_original.m(1);
+    m0(2) = m_original.m(1);
+    m0(3) = m_original.m(1);
+    %qk0 = load('qk0.mat');
+    m1 = calculateM([xmouse; ymouse]);
+    q = quaternionFromVectors(m0,m1);
+    %save(m1,'m0.mat');
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 else
     % Mouse is outside of viewport
@@ -222,18 +228,18 @@ end
 
 
 
-function quaternions_input_Callback(hObject, eventdata, handles)
-% hObject    handle to quaternions_input (see GCBO)
+function q0_input_Callback(hObject, eventdata, handles)
+% hObject    handle to q0_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of quaternions_input as text
-%        str2double(get(hObject,'String')) returns contents of quaternions_input as a double
+% Hints: get(hObject,'String') returns contents of q0_input as text
+%        str2double(get(hObject,'String')) returns contents of q0_input as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function quaternions_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to quaternions_input (see GCBO)
+function q0_input_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q0_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -268,18 +274,18 @@ end
 
 
 
-function euler_angles_input_Callback(hObject, eventdata, handles)
-% hObject    handle to euler_angles_input (see GCBO)
+function euler_yaw_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_yaw (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of euler_angles_input as text
-%        str2double(get(hObject,'String')) returns contents of euler_angles_input as a double
+% Hints: get(hObject,'String') returns contents of euler_yaw as text
+%        str2double(get(hObject,'String')) returns contents of euler_yaw as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function euler_angles_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to euler_angles_input (see GCBO)
+function euler_yaw_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_yaw (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -347,16 +353,289 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+function q1_input_Callback(hObject, eventdata, handles)
+% hObject    handle to q1_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q1_input as text
+%        str2double(get(hObject,'String')) returns contents of q1_input as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function q1_input_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q1_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function q2_input_Callback(hObject, eventdata, handles)
+% hObject    handle to q2_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q2_input as text
+%        str2double(get(hObject,'String')) returns contents of q2_input as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function q2_input_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q2_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function q3_input_Callback(hObject, eventdata, handles)
+% hObject    handle to q3_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q3_input as text
+%        str2double(get(hObject,'String')) returns contents of q3_input as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function q3_input_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q3_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function euler_pitch_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_pitch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of euler_pitch as text
+%        str2double(get(hObject,'String')) returns contents of euler_pitch as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function euler_pitch_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_pitch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function euler_roll_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_roll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of euler_roll as text
+%        str2double(get(hObject,'String')) returns contents of euler_roll as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function euler_roll_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_roll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rotVec_x_Callback(hObject, eventdata, handles)
+% hObject    handle to rotVec_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rotVec_x as text
+%        str2double(get(hObject,'String')) returns contents of rotVec_x as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rotVec_x_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rotVec_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rotVec_y_Callback(hObject, eventdata, handles)
+% hObject    handle to rotVec_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rotVec_y as text
+%        str2double(get(hObject,'String')) returns contents of rotVec_y as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rotVec_y_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rotVec_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rotVec_z_Callback(hObject, eventdata, handles)
+% hObject    handle to rotVec_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rotVec_z as text
+%        str2double(get(hObject,'String')) returns contents of rotVec_z as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rotVec_z_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rotVec_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function euler_axis_x_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_axis_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of euler_axis_x as text
+%        str2double(get(hObject,'String')) returns contents of euler_axis_x as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function euler_axis_x_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_axis_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function euler_axis_y_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_axis_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of euler_axis_y as text
+%        str2double(get(hObject,'String')) returns contents of euler_axis_y as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function euler_axis_y_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_axis_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function euler_axis_z_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_axis_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of euler_axis_z as text
+%        str2double(get(hObject,'String')) returns contents of euler_axis_z as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function euler_axis_z_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_axis_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function euler_angle_Callback(hObject, eventdata, handles)
+% hObject    handle to euler_angle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of euler_angle as text
+%        str2double(get(hObject,'String')) returns contents of euler_angle as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function euler_angle_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to euler_angle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 %Functions
 
 function [new_m] = calculateM(m)
 x = m(1,1);
 y = m(2,1);
-r = sqrt(2);
+r = sqrt(3);
 
 if x*x + y*y < 0.5*r*r
-    z = sqrt(r*r - x*x -y*y)';
+    z = sqrt(r*r - x*x -y*y)'
 else
     z = (r*r)/(2*sqrt(x*x + y*y));
     z = (r*r/sqrt(x*x + y*y))
@@ -371,28 +650,11 @@ half_cos = sqrt(0.5 * (1+cos_theta));
 u = cross(m0,m)/(normalization * 2 * half_cos);
 q = [half_cos; u];
 
-function dq = deltaQuaternion(q,q0)
+function dq = deltaQuaternion(q1,q0)
 q0c = [q0(1); -q0(2:4)];
+dq = quaternionMultiplication(q1,q0c);
 
 function qp = quaternionMultiplication(q,p)
 qp = zeros(4,1);
 qp(1) = q(1)*p(1) - q(2:4)'*p(2:4);
 qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
-
-
-function setGlobal_m0(m)
-global mo
-mo=m;
-
-function setGlobal_q0(q)
-global q0
-q0 = q;
-
-function m = getGlobal_m0
-global m0
-m = m0;
-
-function q = getGlobal_q0
-global q0
-q = q0;
-
