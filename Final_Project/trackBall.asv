@@ -58,6 +58,12 @@ axes(handles.axes1);
 
 handles.Cube=DrawCube(eye(3));
 
+m0=[0;0];
+m0 = calculateM(m0)
+handles.m0 = m0;
+
+handles.q0 = zeros(4,1);
+
 set(handles.axes1,'CameraPosition',...
     [0 0 5],'CameraTarget',...
     [0 0 -5],'CameraUpVector',...
@@ -98,14 +104,16 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     % TODO: From here we should call "Calculate m"
-    m_original = load('m0.mat');
-    m0(1) = m_original.m(1);
-    m0(2) = m_original.m(1);
-    m0(3) = m_original.m(1);
-    %qk0 = load('qk0.mat');
-    m1 = calculateM([xmouse; ymouse]);
-    q = quaternionFromVectors(m0,m1);
-    %save(m1,'m0.mat');
+    
+    m0 = handles.m0;
+    q0 = handles.q0;
+    
+    m = calculateM([xmouse; ymouse]);
+    q = quaternionFromVectors(m0,m)
+    
+    handles.m0 = m;
+    handles.q0 = q;
+    
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 else
     % Mouse is outside of viewport

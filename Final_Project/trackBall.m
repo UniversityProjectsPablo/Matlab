@@ -58,6 +58,12 @@ axes(handles.axes1);
 
 handles.Cube=DrawCube(eye(3));
 
+m0=[0;0];
+m0 = calculateM(m0)
+handles.m0 = m0;
+
+handles.q0 = [1;0;0;0];
+
 set(handles.axes1,'CameraPosition',...
     [0 0 5],'CameraTarget',...
     [0 0 -5],'CameraUpVector',...
@@ -98,12 +104,10 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     % TODO: From here we should call "Calculate m"
-    m_0 = load('m0.mat');
-    m0 = [m_0.m(1);m_0.m(2);m_0.m(3)]
-    %qk0 = load('qk0.mat');
-    m1 = calculateM([xmouse; ymouse]);
-    q = quaternionFromVectors(m0,m1)
-    %save(m1,'m0.mat');
+    
+    m = calculateM([xmouse; ymouse]);
+    handles.m = m;
+    
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 else
     % Mouse is outside of viewport
@@ -129,7 +133,17 @@ xmouse = mousepos(1,1);
 ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
-
+    m0 = handles.m0;
+    q0 = handles.q0;
+    m = handles.m;
+    
+    dq = quaternionFromVectors(m0,m);
+    qk = quaternionMultiplication(dq,q0)
+    
+    %transformAttitudes(qk);
+    
+    handles.m0 = m;
+    handles.q0 = qk;
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
@@ -350,6 +364,7 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % hObject    handle to general_reset_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%handles.Cube=DrawCube(eye(3));
 
 function q1_input_Callback(hObject, eventdata, handles)
 % hObject    handle to q1_input (see GCBO)
@@ -642,11 +657,13 @@ end
 new_m = [x;y,;z];
 
 function q = quaternionFromVectors(m0,m)
-normalization  = sqrt(norm(m0) * norm(m));
-cos_theta = dot(m0,m)/normalization;
-half_cos = sqrt(0.5 * (1+cos_theta));
-u = cross(m0,m)/(normalization * 2 * half_cos);
-q = [half_cos; u];
+%normalization  = sqrt(norm(m0) * norm(m));
+%cos_theta = dot(m0,m)/normalization;
+%half_cos = sqrt(0.5 * (1+cos_theta));
+%u = cross(m0,m)/(normalization * 2 * half_cos);
+w = cross(m0,m);
+q = [1+dot(m0,m); w(1); w(2); w(3)]
+q = normalize(q)
 
 function dq = deltaQuaternion(q1,q0)
 q0c = [q0(1); -q0(2:4)];
@@ -656,3 +673,12 @@ function qp = quaternionMultiplication(q,p)
 qp = zeros(4,1);
 qp(1) = q(1)*p(1) - q(2:4)'*p(2:4);
 qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
+
+function transformAttitudes(qk)
+
+%set(handles.q0_input,'String', num2str(qk(1)));
+%set(handles.q1_input,'String', num2str(qk(2)));
+%set(handles.q2_input,'String', num2str(qk(3)));
+%set(handles.q3_input,'String', num2str(qk(4)));
+
+
