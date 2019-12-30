@@ -133,21 +133,24 @@ xmouse = mousepos(1,1);
 ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
+   
     m0 = handles.m0;
     q0 = handles.q0;
     m = handles.m;
     
-    dq = quaternionFromVectors(m0,m);
+    q = quaternionFromVectors(m0,m);
+    dq = deltaQuaternion(q,q0);
     qk = quaternionMultiplication(dq,q0)
     
-    %transformAttitudes(qk);
+    transformAttitudes(qk);
     
-    handles.m0 = m;
-    handles.q0 = qk;
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
     handles.Cube = RedrawCube(R,handles.Cube);
+    
+    handles.m0 = m;
+    handles.q0 = qk;
     
 end
 guidata(hObject,handles);
@@ -657,13 +660,9 @@ end
 new_m = [x;y,;z];
 
 function q = quaternionFromVectors(m0,m)
-%normalization  = sqrt(norm(m0) * norm(m));
-%cos_theta = dot(m0,m)/normalization;
-%half_cos = sqrt(0.5 * (1+cos_theta));
-%u = cross(m0,m)/(normalization * 2 * half_cos);
 w = cross(m0,m);
 q = [1+dot(m0,m); w(1); w(2); w(3)]
-q = normalize(q)
+q = normalize(q);
 
 function dq = deltaQuaternion(q1,q0)
 q0c = [q0(1); -q0(2:4)];
@@ -676,9 +675,29 @@ qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
 
 function transformAttitudes(qk)
 
+%Quaternion
 %set(handles.q0_input,'String', num2str(qk(1)));
 %set(handles.q1_input,'String', num2str(qk(2)));
 %set(handles.q2_input,'String', num2str(qk(3)));
 %set(handles.q3_input,'String', num2str(qk(4)));
+
+%Axis and angle
+[axis, angle] = quaternion2AxisAngle(qk);
+
+%Rotation vector
+
+%Rotation Matrix
+
+%Euler angles
+
+
+function [axis, angle] = quaternion2AxisAngle(q)
+angle = 2*acosd(q(1));
+half_sin = sind(angle * 0.5);
+axis(1) = q(2) / half_sin;
+axis(2) = q(3) / half_sin;
+axis(3) = q(4) / half_sin;
+
+
 
 
