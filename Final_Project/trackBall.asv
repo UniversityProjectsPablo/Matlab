@@ -701,10 +701,8 @@ ux = [0 -u(3) u(2);
 R = eye(3) + sind(angle)*ux + (1-cosd(angle))*(ux*ux);
 
 %Euler angles
-%[yaw, pitch, roll] = rotM2eAngles(R);
-%set(handles.euler_yaw,'String',num2str(yaw));
-%set(handles.euler_pitch,'String',num2str(pitch));
-%set(handles.euler_roll,'String',num2str(roll));
+[yaw, pitch, roll] = rotM2eAngles(R);
+
 
 function [axis, angle] = quaternion2AxisAngle(q)
 angle = 2*acosd(q(1));
