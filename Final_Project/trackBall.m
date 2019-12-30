@@ -59,7 +59,7 @@ axes(handles.axes1);
 handles.Cube=DrawCube(eye(3));
 
 m0=[0;0];
-m0 = calculateM(m0)
+m0 = calculateM(m0);
 handles.m0 = m0;
 
 handles.q0 = [1;0;0;0];
@@ -139,6 +139,7 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
+    R = quaternion2RotationMatrix(qk);
     handles.Cube = RedrawCube(R,handles.Cube);
     
     handles.m0 = m;
@@ -648,17 +649,17 @@ y = m(2,1);
 r = sqrt(3);
 
 if x*x + y*y < 0.5*r*r
-    z = sqrt(r*r - x*x -y*y)'
+    z = sqrt(r*r - x*x -y*y)';
 else
     z = (r*r)/(2*sqrt(x*x + y*y));
-    z = (r*r/sqrt(x*x + y*y))
+    z = (r*r/sqrt(x*x + y*y));
 end
 
-new_m = [x;y,;z];
+new_m = [x;y;z];
 
 function q = quaternionFromVectors(m0,m)
 w = cross(m0,m);
-q = [1+dot(m0,m); w(1); w(2); w(3)]
+q = [1+dot(m0,m); w(1); w(2); w(3)];
 q = normalize(q);
 
 function dq = deltaQuaternion(q1,q0)
@@ -729,5 +730,10 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
        roll = atan2(R(3,2)/cos(pitch), R(3,3)/cos(pitch));
        yaw = atan2(R(2,1)/cos(pitch), R(1,1)/cos(pitch));
     end
-
-
+    
+ function R = quaternion2RotationMatrix(q)
+ qx = [0 -q(4) q(3);
+      q(4) 0  -q(2);
+      -q(3) q(2) 0];
+ R = (q(1)*q(1) - q(2:4)'*q(2:4)) * eye(3) + 2*q(2:4)*q(2:4)' + 2*q(1)*qx;
+    
