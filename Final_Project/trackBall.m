@@ -360,7 +360,11 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % handles.Cube=DrawCube(eye(3));
+handles.q0 = ([1 0 0 0]');
+handles.v0 = ([0 0 0]');
+R = eye(3);
 
+handles.Cube = RedrawCube(R,handles.Cube);
 
 function q1_input_Callback(hObject, eventdata, handles)
 % hObject    handle to q1_input (see GCBO)
