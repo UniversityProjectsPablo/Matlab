@@ -360,7 +360,7 @@ yvec = str2double(get(handles.rotVec_y, 'String'));
 zvec = str2double(get(handles.rotVec_z, 'String'));
 vec = [xvec, yvec, zvec]';
 
-R = rotateMat(vec);
+R = rotateMatVec(vec);
 
 handles.Cube = RedrawCube(R, handles.Cube);
 
@@ -789,11 +789,16 @@ function [R] = quaternion2RotationMatrix(q)
       -q(3) q(2) 0];
  R = (q(1)*q(1) - q(2:4)'*q(2:4)) * eye(3) + 2*q(2:4)*q(2:4)' + 2*q(1)*qx;
     
-function [R] = rotateMat(vec)
-
+function [R] = rotateMatVec(vec)
+% Transform vector into equivalent matrix
 Ux = [0 -vec(3) vec(2); vec(3) 0 -vec(1); -vec(2) vec(1) 0];
 
 vec_normalized = norm(vec);
-R = eye(3) * cosd(vec_normalized); 
-R = R + ((1 - cosd(vec_normalized)) / vec_normalized ^ 2) * (vec * vec'); 
-R = R + (sind(vec_normalized) / vec_normalized) * Ux;
+if vec_normalized ~= 0
+    % Formula divided into different lines to make it more legible
+    R = eye(3) * cosd(vec_normalized); 
+    R = R + ((1 - cosd(vec_normalized)) / vec_normalized ^ 2) * (vec * vec'); 
+    R = R + (sind(vec_normalized) / vec_normalized) * Ux;
+else
+    R = eye(3);
+end
