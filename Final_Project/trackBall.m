@@ -61,6 +61,7 @@ handles.Cube=DrawCube(eye(3));
 m0=[0;0];
 m0 = calculateM(m0);
 handles.m0 = m0;
+handles.m = m0;
 
 handles.q0 = [1;0;0;0];
 
@@ -102,9 +103,9 @@ xmouse = mousepos(1,1);
 ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
-    % Mouse over viewport    
+    % Mouse over viewport  
     m = calculateM([xmouse; ymouse]);
-    handles.m = m;
+    handles.m = m
     
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
@@ -651,19 +652,23 @@ r = sqrt(3);
 if x*x + y*y < 0.5*r*r
     z = sqrt(r*r - x*x -y*y)';
 else
-    z = (r*r)/(2*sqrt(x*x + y*y));
-    z = (r*r/sqrt(x*x + y*y));
+   % z = (r*r)/(2*sqrt(x*x + y*y));
+    z = (r*r)/sqrt(x*x + y*y);
 end
 
 new_m = [x;y;z];
 
 function q = quaternionFromVectors(m0,m)
+%normalize(m0);
+%normalize(m);
 w = cross(m0,m);
 q = [1+dot(m0,m); w(1); w(2); w(3)];
 q = normalize(q);
 
 function dq = deltaQuaternion(q1,q0)
+normalize(q1);
 q0c = [q0(1); -q0(2:4)];
+normalize(q0c);
 dq = quaternionMultiplication(q1,q0c);
 
 function qp = quaternionMultiplication(q,p)
