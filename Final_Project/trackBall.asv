@@ -367,34 +367,6 @@ handles.q0 = ([1 0 0 0]');
 handles.v0 = ([0 0 0]');
 R = eye(3);
 
-set(handles.q0_input,'String', 0);
-set(handles.q1_input,'String', 0);
-set(handles.q2_input,'String', 0);
-set(handles.q3_input,'String', 0);
-
-set(handles.euler_axis_x,'String', 0);
-set(handles.euler_axis_y,'String', 0);
-set(handles.euler_axis_z,'String', 0);
-set(handles.euler_angle,'String', 0);
-
-set(handles.euler_yaw,'String', 0);
-set(handles.euler_pitch,'String', 0);
-set(handles.euler_roll,'String', 0);
-
-set(handles.rotVec_x,'String', 0);
-set(handles.rotVec_y,'String', 0);
-set(handles.rotVec_z,'String', 0);
-
-set(handles.rot_mat_1_1,'String', 0);
-set(handles.rot_mat_1_2,'String', 0);
-set(handles.rot_mat_1_3,'String', 0);
-set(handles.rot_mat_2_1,'String', 0);
-set(handles.rot_mat_2_2,'String', 0);
-set(handles.rot_mat_2_3,'String', 0);
-set(handles.rot_mat_3_1,'String', 0);
-set(handles.rot_mat_3_2,'String', 0);
-set(handles.rot_mat_3_3,'String', 0);
-
 handles.Cube = RedrawCube(R,handles.Cube);
 
 function q1_input_Callback(hObject, eventdata, handles)
