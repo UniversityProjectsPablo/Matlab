@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 27-Dec-2019 18:04:34
+% Last Modified by GUIDE v2.5 31-Dec-2019 17:41:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -800,5 +800,6 @@ if vec_normalized ~= 0
     R = R + ((1 - cosd(vec_normalized)) / vec_normalized ^ 2) * (vec * vec'); 
     R = R + (sind(vec_normalized) / vec_normalized) * Ux;
 else
+    % We ensure that there is always a cube drawn on screen
     R = eye(3);
 end
