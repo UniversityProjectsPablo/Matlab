@@ -783,7 +783,7 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
        yaw = atan2(R(2,1)/cos(pitch), R(1,1)/cos(pitch));
     end
     
-function R = quaternion2RotationMatrix(q)
+function [R] = quaternion2RotationMatrix(q)
  qx = [0 -q(4) q(3);
       q(4) 0  -q(2);
       -q(3) q(2) 0];
@@ -791,5 +791,9 @@ function R = quaternion2RotationMatrix(q)
     
 function [R] = rotateMat(vec)
 
-R = eye(3);
-         
+Ux = [0 -vec(3) vec(2); vec(3) 0 -vec(1); -vec(2) vec(1) 0];
+
+vec_normalized = norm(vec);
+R = eye(3) * cosd(vec_normalized); 
+R = R + ((1 - cosd(vec_normalized)) / vec_normalized ^ 2) * (vec * vec'); 
+R = R + (sind(vec_normalized) / vec_normalized) * Ux;
