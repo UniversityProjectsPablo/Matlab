@@ -341,14 +341,19 @@ function euler_angle_axis_button_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_angle_axis_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+euler_angle = str2double(get(handles.euler_angle,'String'));
+euler_axis = [str2double(get(handles.euler_axis_x,'String'));
+                str2double(get(handles.euler_axis_y,'String'));
+                str2double(get(handles.euler_axis_z,'String'))];
 
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_angles_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+euler_angles = [str2double(get(handles.euler_yaw,'String'));
+                str2double(get(handles.euler_pitch,'String'));
+                str2double(get(handles.euler_roll,'String'))];
 
 % --- Executes on button press in rotation_vector_button.
 function rotation_vector_button_Callback(hObject, eventdata, handles)
