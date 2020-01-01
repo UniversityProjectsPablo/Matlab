@@ -104,9 +104,6 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport  
-    m = calculateM([xmouse; ymouse]);
-    handles.m = m;
-    
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
 guidata(hObject,handles)
@@ -127,20 +124,28 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
    % Recalculate new position
-    m = handles.m; 
+   
+    m = calculateM([xmouse; ymouse]); 
    
     m0 = handles.m0;
     q0 = handles.q0;
     
     dq = quaternionFromVectors(m0,m);
+    dq = normalize(dq);
+    dq = dq/norm(dq);
+    
     %dq = deltaQuaternion(q,q0);
+    %dq = normalize(dq);
+    
     qk = quaternionMultiplication(dq,q0);
+    qk = normalize(qk);
+    qk = qk/norm(qk);
     
     transformAttitudes(qk, handles);
     
     %%% DO things
     % use with the proper R matrix to rotate the cube
-    R = [1 0 0; 0 -1 0;0 0 -1];
+    %R = [1 0 0; 0 -1 0;0 0 -1];
     R = quaternion2RotationMatrix(qk);
     handles.Cube = RedrawCube(R,handles.Cube);
     
@@ -335,6 +340,21 @@ function quaternions_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+handles.qk(1) = str2double(get(handles.q0_input,'String'));
+handles.qk(2) = str2double(get(handles.q1_input,'String'));
+handles.qk(3) = str2double(get(handles.q2_input,'String'));
+handles.qk(4) = str2double(get(handles.q3_input,'String'));
+
+qk = handles.qk;
+
+transformAttitudes(qk,handles);
+
+R = quaternion2RotationMatrix(qk);
+handles.Cube = RedrawCube(R,handles.Cube);
+    
+handles.m0 = m;
+handles.q0 = qk;
+
 
 % --- Executes on button press in euler_angle_axis_button.
 function euler_angle_axis_button_Callback(hObject, eventdata, handles)
@@ -342,12 +362,30 @@ function euler_angle_axis_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+angle = str2double(get(handles.euler_angle,'String'));
+
 
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_angles_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+handles.euler_yaw = str2double(get(handles.euler_yaw, 'String'));
+handles.euler_pitch = str2double(get(handles.euler_pitch, 'String'));
+handles.euler_roll = str2double(get(handles.euler_roll, 'String'));
+
+%euler angles2rotMat to be done
+
+qk = handles.qk;
+
+transformAttitudes(qk,handles);
+
+R = quaternion2RotationMatrix(qk);
+handles.Cube = RedrawCube(R,handles.Cube);
+    
+handles.m0 = m;
+handles.q0 = qk;
 
 
 % --- Executes on button press in rotation_vector_button.
@@ -363,8 +401,13 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % handles.Cube=DrawCube(eye(3));
-handles.q0 = ([1 0 0 0]');
-handles.v0 = ([0 0 0]');
+m0=[0;0];
+m0 = calculateM(m0);
+handles.m0 = m0;
+handles.m = m0;
+
+handles.q0 = [1;0;0;0];
+handles.v0 = ([0;0;0]);
 R = eye(3);
 
 set(handles.q0_input,'String', 0);
@@ -681,29 +724,30 @@ r = sqrt(3);
 if x*x + y*y < 0.5*r*r
     z = sqrt(r*r - x*x -y*y)';
 else
-   % z = (r*r)/(2*sqrt(x*x + y*y));
     z = (r*r)/sqrt(x*x + y*y);
 end
 
 new_m = [x;y;z];
 
 function q = quaternionFromVectors(m0,m)
-%normalize(m0);
-%normalize(m);
+normalize(m0);
+normalize(m);
 w = cross(m0,m);
 q = [1+dot(m0,m); w(1); w(2); w(3)];
 q = normalize(q);
 
 function dq = deltaQuaternion(q1,q0)
 normalize(q1);
+normalize(q0);
 q0c = [q0(1); -q0(2:4)];
-normalize(q0c);
 dq = quaternionMultiplication(q1,q0c);
+normalize(dq);
 
 function qp = quaternionMultiplication(q,p)
 qp = zeros(4,1);
-qp(1) = q(1)*p(1) - q(2:4)'*p(2:4);
+qp(1) = (q(1)*p(1)) - (q(2:4)'*p(2:4));
 qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
+normalize(qp);
 
 function transformAttitudes(qk, handles)
 
@@ -744,10 +788,10 @@ set(handles.rot_mat_3_2,'String',num2str(R(3,2)));
 set(handles.rot_mat_3_3,'String',num2str(R(3,3)));
 
 %Euler angles
-%[yaw, pitch, roll] = rotM2eAngles(R);
-%set(handles.euler_yaw,'String',num2str(yaw));
-%set(handles.euler_pitch,'String',num2str(pitch));
-%set(handles.euler_roll,'String',num2str(roll));
+[yaw, pitch, roll] = rotM2eAngles(R);
+set(handles.euler_yaw,'String',num2str(yaw));
+set(handles.euler_pitch,'String',num2str(pitch));
+set(handles.euler_roll,'String',num2str(roll));
 
 function [axis, angle] = quaternion2AxisAngle(q)
 angle = 2*acosd(q(1));
@@ -781,4 +825,8 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
       q(4) 0  -q(2);
       -q(3) q(2) 0];
  R = (q(1)*q(1) - q(2:4)'*q(2:4)) * eye(3) + 2*q(2:4)*q(2:4)' + 2*q(1)*qx;
+ 
+ %R = [q(1)*q(1) + q(2)*q(2) - q(3)*q(3) - q(4)*q(4), 2*q(2)*q(3) - 2*q(1)*q(4), 2*q(2)*q(4) + 2*q(1)*q(3);
+    % 2*q(2)*q(3)+2*q(1)*q(4), q(1)*q(1)-q(2)*q(2)+q(3)*q(3)-q(4)*q(4), -2*q(3)*q(4)-2*q(1)*q(2);
+     %2*q(2)*q(4)-2*q(1)*q(3), 2*q(3)*q(4)+2*q(1)*q(2), q(1)*q(1)-q(2)*q(2)-q(3)*q(3)+q(4)*q(4)];
     
