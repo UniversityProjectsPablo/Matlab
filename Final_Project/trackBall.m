@@ -365,10 +365,10 @@ euler_angle = str2double(get(handles.euler_angle,'String'));
 euler_axis = [str2double(get(handles.euler_axis_x,'String'));
                 str2double(get(handles.euler_axis_y,'String'));
                 str2double(get(handles.euler_axis_z,'String'))];
-Mrot = eye(3);
+% R = eye(3);
+R = Eaa2rotMat(deg2rad(euler_angle), euler_axis);
 
-
-handles.Cube = RedrawCube(Mrot,handles.Cube);
+handles.Cube = RedrawCube(R,handles.Cube);
             
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
@@ -856,3 +856,20 @@ else
     % We ensure that there is always a cube drawn on screen
     R = eye(3);
 end
+
+function [R] = Eaa2rotMat(a,u)
+% [R] = Eaa2rotMat(a,u)
+% Computes the rotation matrix R given an angle and axis of rotation. 
+% Inputs:
+%	a: angle of rotation
+%	u: axis of rotation 
+% Outputs:
+%	R: generated rotation matrix
+
+u = u/sqrt(u'*u);
+
+[ux] = [0, -u(3), u(2);
+        u(3), 0, -u(1);
+        -u(2) u(1) 0];
+%using the Rodrigues formula we can find the rotation matrix
+R = eye(3)*cos(a) + (1 - cos(a))*(u *u') + ux*sin(a);
