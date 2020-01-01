@@ -135,6 +135,7 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     dq = dq/norm(dq);
 
     qk = quaternionMultiplication(dq,q0);
+    %qk = normalize(qk);
     %qk = qk/norm(qk);
 
     transformAttitudes(qk, handles);
@@ -781,7 +782,11 @@ set(handles.rotVec_y,'String',num2str(rot_vec(2)));
 set(handles.rotVec_z,'String',num2str(rot_vec(3)));
 
 %Rotation Matrix
-R = quaternion2RotationMatrix(qk);
+ux = [0 -u(3) u(2);
+      u(3) 0  -u(1);
+      -u(2) u(1) 0];
+
+R = eye(3) + sind(angle)*ux + (1-cosd(angle))*(ux*ux);
 
 set(handles.rot_mat_1_1,'String',num2str(R(1,1)));
 set(handles.rot_mat_1_2,'String',num2str(R(1,2)));
@@ -794,10 +799,10 @@ set(handles.rot_mat_3_2,'String',num2str(R(3,2)));
 set(handles.rot_mat_3_3,'String',num2str(R(3,3)));
 
 %Euler angles
-%[yaw, pitch, roll] = rotM2eAngles(R);
-%set(handles.euler_yaw,'String',num2str(yaw));
-%set(handles.euler_pitch,'String',num2str(pitch));
-%set(handles.euler_roll,'String',num2str(roll));
+[yaw, pitch, roll] = rotM2eAngles(R);
+set(handles.euler_yaw,'String',num2str(yaw));
+set(handles.euler_pitch,'String',num2str(pitch));
+set(handles.euler_roll,'String',num2str(roll));
 
 function [axis, angle] = quaternion2AxisAngle(q)
 angle = 2*acosd(q(1));
@@ -827,9 +832,14 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
     end
 
 function [R] = quaternion2RotationMatrix(q)
- R = [q(1)*q(1) + q(2)*q(2) - q(3)*q(3) - q(4)*q(4), 2*q(2)*q(3) - 2*q(1)*q(4), 2*q(2)*q(4) + 2*q(1)*q(3);
-     2*q(2)*q(3)+2*q(1)*q(4), q(1)*q(1)-q(2)*q(2)+q(3)*q(3)-q(4)*q(4), -2*q(3)*q(4)-2*q(1)*q(2);
-     2*q(2)*q(4)-2*q(1)*q(3), 2*q(3)*q(4)+2*q(1)*q(2), q(1)*q(1)-q(2)*q(2)-q(3)*q(3)+q(4)*q(4)];
+ qx = [0 -q(4) q(3);
+      q(4) 0  -q(2);
+      -q(3) q(2) 0];
+ R = (q(1)*q(1) - q(2:4)'*q(2:4)) * eye(3) + 2*q(2:4)*q(2:4)' + 2*q(1)*qx;
+
+ %R = [q(1)*q(1) + q(2)*q(2) - q(3)*q(3) - q(4)*q(4), 2*q(2)*q(3) - 2*q(1)*q(4), 2*q(2)*q(4) + 2*q(1)*q(3);
+    % 2*q(2)*q(3)+2*q(1)*q(4), q(1)*q(1)-q(2)*q(2)+q(3)*q(3)-q(4)*q(4), -2*q(3)*q(4)-2*q(1)*q(2);
+     %2*q(2)*q(4)-2*q(1)*q(3), 2*q(3)*q(4)+2*q(1)*q(2), q(1)*q(1)-q(2)*q(2)-q(3)*q(3)+q(4)*q(4)];
 
 function [R] = rotateMatVec(vec)
 % Transform vector into equivalent matrix
