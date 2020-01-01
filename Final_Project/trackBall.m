@@ -131,8 +131,6 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     q0 = handles.q0;
 
     dq = quaternionFromVectors(m0,m);
-    dq = normalize(dq);
-    dq = dq/norm(dq);
 
     %dq = deltaQuaternion(q,q0);
     %dq = normalize(dq);
@@ -742,10 +740,9 @@ end
 new_m = [x;y;z];
 
 function q = quaternionFromVectors(m0,m)
-normalize(m0);
-normalize(m);
+m_norms = sqrt(norm(m0) * norm(m));
 w = cross(m0,m);
-q = [1+dot(m0,m); w(1); w(2); w(3)];
+q = [m_norms + dot(m0,m); w];
 q = normalize(q);
 
 function dq = deltaQuaternion(q1,q0)
