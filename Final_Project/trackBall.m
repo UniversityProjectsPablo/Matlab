@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 27-Dec-2019 18:04:34
+% Last Modified by GUIDE v2.5 31-Dec-2019 17:41:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -84,7 +84,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = trackBall_OutputFcn(hObject, eventdata, handles) 
+function varargout = trackBall_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -103,7 +103,7 @@ xmouse = mousepos(1,1);
 ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
-    % Mouse over viewport  
+    % Mouse over viewport
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
 guidata(hObject,handles)
@@ -124,34 +124,34 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
    % Recalculate new position
-   
-    m = calculateM([xmouse; ymouse]); 
-   
+
+    m = calculateM([xmouse; ymouse]);
+
     m0 = handles.m0;
     q0 = handles.q0;
-    
+
     dq = quaternionFromVectors(m0,m);
     dq = normalize(dq);
     dq = dq/norm(dq);
-    
+
     %dq = deltaQuaternion(q,q0);
     %dq = normalize(dq);
-    
+
     qk = quaternionMultiplication(dq,q0);
     qk = normalize(qk);
     qk = qk/norm(qk);
-    
+
     transformAttitudes(qk, handles);
-    
+
     %%% DO things
     % use with the proper R matrix to rotate the cube
     %R = [1 0 0; 0 -1 0;0 0 -1];
     R = quaternion2RotationMatrix(qk);
     handles.Cube = RedrawCube(R,handles.Cube);
-    
+
     handles.m0 = m;
     handles.q0 = qk;
-    
+
 end
 guidata(hObject,handles);
 
@@ -351,7 +351,7 @@ transformAttitudes(qk,handles);
 
 R = quaternion2RotationMatrix(qk);
 handles.Cube = RedrawCube(R,handles.Cube);
-    
+
 handles.m0 = m;
 handles.q0 = qk;
 
@@ -361,9 +361,10 @@ function euler_angle_axis_button_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_angle_axis_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-angle = str2double(get(handles.euler_angle,'String'));
-
+euler_angle = str2double(get(handles.euler_angle,'String'));
+euler_axis = [str2double(get(handles.euler_axis_x,'String'));
+                str2double(get(handles.euler_axis_y,'String'));
+                str2double(get(handles.euler_axis_z,'String'))];
 
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
@@ -383,7 +384,7 @@ transformAttitudes(qk,handles);
 
 R = quaternion2RotationMatrix(qk);
 handles.Cube = RedrawCube(R,handles.Cube);
-    
+
 handles.m0 = m;
 handles.q0 = qk;
 
@@ -393,7 +394,14 @@ function rotation_vector_button_Callback(hObject, eventdata, handles)
 % hObject    handle to rotation_vector_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+xvec = str2double(get(handles.rotVec_x, 'String'));
+yvec = str2double(get(handles.rotVec_y, 'String'));
+zvec = str2double(get(handles.rotVec_z, 'String'));
+vec = [xvec, yvec, zvec]';
 
+R = rotateMatVec(vec);
+
+handles.Cube = RedrawCube(R, handles.Cube);
 
 % --- Executes on button press in general_reset_button.
 function general_reset_button_Callback(hObject, eventdata, handles)
@@ -774,7 +782,7 @@ set(handles.rotVec_z,'String',num2str(rot_vec(3)));
 ux = [0 -u(3) u(2);
       u(3) 0  -u(1);
       -u(2) u(1) 0];
-  
+
 R = eye(3) + sind(angle)*ux + (1-cosd(angle))*(ux*ux);
 
 set(handles.rot_mat_1_1,'String',num2str(R(1,1)));
@@ -801,7 +809,7 @@ axis(2) = q(3) / half_sin;
 axis(3) = q(4) / half_sin;
 
 function [yaw, pitch, roll] = rotM2eAngles(R)
-    %first we check the two special cases 
+    %first we check the two special cases
     if round(R(3,1),6) == 1
       pitch = pi * 1.5;
       roll = 0;
@@ -819,14 +827,28 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
        roll = atan2(R(3,2)/cos(pitch), R(3,3)/cos(pitch));
        yaw = atan2(R(2,1)/cos(pitch), R(1,1)/cos(pitch));
     end
-    
- function R = quaternion2RotationMatrix(q)
+
+function [R] = quaternion2RotationMatrix(q)
  qx = [0 -q(4) q(3);
       q(4) 0  -q(2);
       -q(3) q(2) 0];
  R = (q(1)*q(1) - q(2:4)'*q(2:4)) * eye(3) + 2*q(2:4)*q(2:4)' + 2*q(1)*qx;
- 
+
  %R = [q(1)*q(1) + q(2)*q(2) - q(3)*q(3) - q(4)*q(4), 2*q(2)*q(3) - 2*q(1)*q(4), 2*q(2)*q(4) + 2*q(1)*q(3);
     % 2*q(2)*q(3)+2*q(1)*q(4), q(1)*q(1)-q(2)*q(2)+q(3)*q(3)-q(4)*q(4), -2*q(3)*q(4)-2*q(1)*q(2);
      %2*q(2)*q(4)-2*q(1)*q(3), 2*q(3)*q(4)+2*q(1)*q(2), q(1)*q(1)-q(2)*q(2)-q(3)*q(3)+q(4)*q(4)];
-    
+
+function [R] = rotateMatVec(vec)
+% Transform vector into equivalent matrix
+Ux = [0 -vec(3) vec(2); vec(3) 0 -vec(1); -vec(2) vec(1) 0];
+
+vec_normalized = norm(vec);
+if vec_normalized ~= 0
+    % Formula divided into different lines to make it more legible
+    R = eye(3) * cosd(vec_normalized);
+    R = R + ((1 - cosd(vec_normalized)) / vec_normalized ^ 2) * (vec * vec');
+    R = R + (sind(vec_normalized) / vec_normalized) * Ux;
+else
+    % We ensure that there is always a cube drawn on screen
+    R = eye(3);
+end
