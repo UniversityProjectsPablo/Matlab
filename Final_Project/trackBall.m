@@ -104,6 +104,8 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
+    handles.m0 = calculateM([xmouse; ymouse]);
+    handles.q0 = [1;0;0;0];
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
 guidata(hObject,handles)
@@ -126,24 +128,19 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
    % Recalculate new position
 
     m = calculateM([xmouse; ymouse]);
-
     m0 = handles.m0;
     q0 = handles.q0;
 
     dq = quaternionFromVectors(m0,m);
 
-    %dq = deltaQuaternion(q,q0);
-    %dq = normalize(dq);
-
     qk = quaternionMultiplication(dq,q0);
-    qk = normalize(qk);
+    %qk = normalize(qk);
     qk = qk/norm(qk);
 
     transformAttitudes(qk, handles);
 
     %%% DO things
     % use with the proper R matrix to rotate the cube
-    %R = [1 0 0; 0 -1 0;0 0 -1];
     R = quaternion2RotationMatrix(qk);
     handles.Cube = RedrawCube(R,handles.Cube);
 
