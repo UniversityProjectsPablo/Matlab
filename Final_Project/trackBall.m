@@ -363,7 +363,11 @@ euler_angle = str2double(get(handles.euler_angle,'String'));
 euler_axis = [str2double(get(handles.euler_axis_x,'String'));
                 str2double(get(handles.euler_axis_y,'String'));
                 str2double(get(handles.euler_axis_z,'String'))];
+Mrot = eye(3);
 
+
+handles.Cube = RedrawCube(Mrot,handles.Cube);
+            
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_angles_button (see GCBO)
@@ -397,9 +401,9 @@ yvec = str2double(get(handles.rotVec_y, 'String'));
 zvec = str2double(get(handles.rotVec_z, 'String'));
 vec = [xvec, yvec, zvec]';
 
-R = rotateMatVec(vec);
+Mrot = rotateMatVec(vec);
 
-handles.Cube = RedrawCube(R, handles.Cube);
+handles.Cube = RedrawCube(Mrot, handles.Cube);
 
 % --- Executes on button press in general_reset_button.
 function general_reset_button_Callback(hObject, eventdata, handles)

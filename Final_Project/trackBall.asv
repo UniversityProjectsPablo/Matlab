@@ -104,6 +104,9 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
+    m = calculateM([xmouse; ymouse]);
+    handles.m = m;
+
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
 guidata(hObject,handles)
@@ -366,6 +369,8 @@ euler_axis = [str2double(get(handles.euler_axis_x,'String'));
                 str2double(get(handles.euler_axis_y,'String'));
                 str2double(get(handles.euler_axis_z,'String'))];
 
+handles.Cube = RedrawCube(R,handles.Cube);
+
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_angles_button (see GCBO)
@@ -399,7 +404,7 @@ yvec = str2double(get(handles.rotVec_y, 'String'));
 zvec = str2double(get(handles.rotVec_z, 'String'));
 vec = [xvec, yvec, zvec]';
 
-R = rotateMatVec(vec);
+M = rotateMatVec(vec);
 
 handles.Cube = RedrawCube(R, handles.Cube);
 
@@ -732,6 +737,7 @@ r = sqrt(3);
 if x*x + y*y < 0.5*r*r
     z = sqrt(r*r - x*x -y*y)';
 else
+   % z = (r*r)/(2*sqrt(x*x + y*y));
     z = (r*r)/sqrt(x*x + y*y);
 end
 
