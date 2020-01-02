@@ -67,6 +67,7 @@ h = plot(xunit, yunit);
 hold on;
 
 handles.Cube=DrawCube(eye(3));
+hold off;
 
 m0=[0;0];
 m0 = calculateM(m0);
@@ -799,12 +800,12 @@ r = sqrt(3);
 zNorm = (r*r)/(2*sqrt(x*x + y*y));
 totalNorm = norm([x;y;zNorm]);
 
-if x*x + y*y < r/sqrt(2)
+if x*x + y*y < r*r*0.5
    z = abs(sqrt(r*r - x*x -y*y));
 else
    x = r*x/totalNorm;
    y = r*y/totalNorm;
-   z = zNorm/totalNorm;
+   z = r*zNorm/totalNorm;
 end
 
 new_m = [x;y;z];
