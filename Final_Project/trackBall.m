@@ -56,6 +56,16 @@ set(hObject,'WindowButtonDownFcn',{@my_MouseClickFcn,handles.axes1});
 set(hObject,'WindowButtonUpFcn',{@my_MouseReleaseFcn,handles.axes1});
 axes(handles.axes1);
 
+%debug circle
+r = sqrt(3);
+x = 0;
+y = 0;
+th = 0:pi/50:2*pi;
+xunit = r * cos(th) + x;
+yunit = r * sin(th) + y;
+h = plot(xunit, yunit);
+hold on;
+
 handles.Cube=DrawCube(eye(3));
 
 m0=[0;0];
@@ -105,7 +115,6 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     handles.m0 = calculateM([xmouse; ymouse]);
-    %handles.q0 = [1;0;0;0]
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
 guidata(hObject,handles)
@@ -125,8 +134,7 @@ xmouse = mousepos(1,1);
 ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
-   % Recalculate new position
-
+    
     m0 = handles.m0;
     q0 = handles.q0;
         
@@ -138,8 +146,7 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     qk = quaternionMultiplication(dq,q0);
 
     transformAttitudes(qk, handles);
-
-    %%% DO things
+    
     % use with the proper R matrix to rotate the cube
     R = quaternion2RotationMatrix(qk);
     handles.Cube = RedrawCube(R,handles.Cube);
@@ -152,17 +159,16 @@ guidata(hObject,handles);
 
 function h = DrawCube(R)
 
-M0 = [    -1  -1 1;   %Node 1
-    -1   1 1;   %Node 2
-    1   1 1;   %Node 3
-    1  -1 1;   %Node 4
-    -1  -1 -1;  %Node 5
-    -1   1 -1;  %Node 6
-    1   1 -1;  %Node 7
-    1  -1 -1]; %Node 8
+M0 = [-1 -1  1;   %Node 1
+      -1  1  1;   %Node 2
+       1  1  1;   %Node 3
+       1 -1  1;   %Node 4
+      -1 -1 -1;  %Node 5
+      -1  1 -1;  %Node 6
+       1  1 -1;  %Node 7
+       1 -1 -1]; %Node 8
 
 M = (R*M0')';
-
 
 x = M(:,1);
 y = M(:,2);
@@ -740,8 +746,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function euler_axis_z_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_axis_z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -792,39 +796,29 @@ function [new_m] = calculateM(m)
 x = m(1,1);
 y = m(2,1);
 r = sqrt(3);
-Znorm = (r*r)/(2*sqrt(x*x + y*y));
-totalNorm = norm([x;y;Znorm]);
+zNorm = (r*r)/(2*sqrt(x*x + y*y));
+totalNorm = norm([x;y;zNorm]);
 
-if x*x + y*y < 0.5*r*r
-    z = sqrt(r*r - (x*x +y*y))';
+if x*x + y*y < r/sqrt(2)
+   z = abs(sqrt(r*r - x*x -y*y));
 else
-   % x = (r*x)/totalNorm;
-   % y = (r*y)/totalNorm;
-   % z = ((r*r*r)/(2*sqrt(x*x + y*y)))/totalNorm;
-   z = (r*r*0.5)/sqrt(x*x+y*y);
+   x = r*x/totalNorm;
+   y = r*y/totalNorm;
+   z = zNorm/totalNorm;
 end
 
-new_m = [x;y;z]
+new_m = [x;y;z];
 
 function q = quaternionFromVectors(m0,m)
 length = sqrt(norm(m0) * norm(m));
 w = cross(m0,m);
 q = [length + dot(m0,m); w];
-%normalize(q);
-
-
-function dq = deltaQuaternion(q1,q0)
-%normalize(q1);
-%normalize(q0);
-q0c = [q0(1); -q0(2:4)];
-dq = quaternionMultiplication(q1,q0c);
-normalize(dq);
 
 function qp = quaternionMultiplication(q,p)
 qp = zeros(4,1);
 qp(1) = (q(1)*p(1)) - (q(2:4)'*p(2:4));
 qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
-normalize(qp);
+%normalize(qp);
 
 function transformAttitudes(qk, handles)
 
