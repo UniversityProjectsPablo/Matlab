@@ -395,8 +395,8 @@ set(handles.rot_mat_3_3,'String',num2str(R(3,3)));
 %Euler angle and axis
 [a,u] = rotMat2Eaa(R);
 set(handles.euler_axis_x,'String', u(1));
-set(handles.euler_axis_x,'String', u(2));
-set(handles.euler_axis_x,'String', u(3));
+set(handles.euler_axis_y,'String', u(2));
+set(handles.euler_axis_z,'String', u(3));
 set(handles.euler_angle,'String', a);
 
 %rotation vector
@@ -410,10 +410,10 @@ set(handles.q0_input,'String', qk(1));
 set(handles.q1_input,'String', qk(2));
 set(handles.q2_input,'String', qk(3));
 set(handles.q3_input,'String', qk(4));
+handles.q0 = qk;
 
 handles.Cube = RedrawCube(R,handles.Cube);
 
-handles.q0 = qk;
 
 
 % --- Executes on button press in rotation_vector_button.
@@ -421,14 +421,48 @@ function rotation_vector_button_Callback(hObject, eventdata, handles)
 % hObject    handle to rotation_vector_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%Rotation vector
 xvec = str2double(get(handles.rotVec_x, 'String'));
 yvec = str2double(get(handles.rotVec_y, 'String'));
 zvec = str2double(get(handles.rotVec_z, 'String'));
 vec = [xvec, yvec, zvec]';
 
-Mrot = rotateMatVec(vec);
+%Rotation Matrix
+R = rotateMatVec(vec);
+set(handles.rot_mat_1_1,'String',num2str(R(1,1)));
+set(handles.rot_mat_1_2,'String',num2str(R(1,2)));
+set(handles.rot_mat_1_3,'String',num2str(R(1,3)));
+set(handles.rot_mat_2_1,'String',num2str(R(2,1)));
+set(handles.rot_mat_2_2,'String',num2str(R(2,2)));
+set(handles.rot_mat_2_3,'String',num2str(R(2,3)));
+set(handles.rot_mat_3_1,'String',num2str(R(3,1)));
+set(handles.rot_mat_3_2,'String',num2str(R(3,2)));
+set(handles.rot_mat_3_3,'String',num2str(R(3,3)));
 
-handles.Cube = RedrawCube(Mrot, handles.Cube);
+%Euler angles
+[yaw, pitch, roll] = rotM2eAngles(R);
+set(handles.euler_yaw,'String', num2str(yaw));
+set(handles.euler_pitch,'String', num2str(pitch));
+set(handles.euler_roll,'String', num2str(roll));
+
+%Euler angle axis
+u = vec/norm(vec);
+a = norm(vec);
+set(handles.euler_axis_x,'String', u(1));
+set(handles.euler_axis_y,'String', u(2));
+set(handles.euler_axis_z,'String', u(3));
+set(handles.euler_angle,'String', a);
+
+%Quaternion
+qk = [cosd(a); sind(a)*u];
+set(handles.q0_input,'String', qk(1));
+set(handles.q1_input,'String', qk(2));
+set(handles.q2_input,'String', qk(3));
+set(handles.q3_input,'String', qk(4));
+handles.q0 = qk;
+
+handles.Cube = RedrawCube(R, handles.Cube);
 
 % --- Executes on button press in general_reset_button.
 function general_reset_button_Callback(hObject, eventdata, handles)
