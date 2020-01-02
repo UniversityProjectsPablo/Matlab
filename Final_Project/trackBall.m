@@ -105,7 +105,7 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     % Mouse over viewport
     handles.m0 = calculateM([xmouse; ymouse]);
-    handles.q0 = [1;0;0;0];
+    %handles.q0 = [1;0;0;0]
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
 end
 guidata(hObject,handles)
@@ -127,15 +127,15 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
    % Recalculate new position
 
-    m = calculateM([xmouse; ymouse]);
-    m0 = handles.m0;
+    m0 = handles.m0
     q0 = handles.q0;
+        
+    m = calculateM([xmouse; ymouse])
 
     dq = quaternionFromVectors(m0,m);
     dq = dq/norm(dq);
-
+    
     qk = quaternionMultiplication(dq,q0);
-    %qk = qk/norm(qk);
 
     transformAttitudes(qk, handles);
 
@@ -416,6 +416,8 @@ m0=[0;0];
 m0 = calculateM(m0);
 handles.m0 = m0;
 handles.m = m0;
+handles.q0 = [1;0;0;0];
+handles.qk = [1;0;0;0];
 
 handles.q0 = [1;0;0;0];
 handles.v0 = ([0;0;0]);
@@ -731,24 +733,30 @@ function [new_m] = calculateM(m)
 x = m(1,1);
 y = m(2,1);
 r = sqrt(3);
+Znorm = (r*r)/(2*sqrt(x*x + y*y));
+totalNorm = norm([x;y;Znorm]);
 
 if x*x + y*y < 0.5*r*r
-    z = sqrt(r*r - x*x -y*y)';
+    z = sqrt(r*r - (x*x +y*y))';
 else
-    z = (r*r)/sqrt(x*x + y*y);
+   % x = (r*x)/totalNorm;
+   % y = (r*y)/totalNorm;
+   % z = ((r*r*r)/(2*sqrt(x*x + y*y)))/totalNorm;
+   z = (r*r*0.5)/sqrt(x*x+y*y);
 end
 
 new_m = [x;y;z];
 
 function q = quaternionFromVectors(m0,m)
-m_norms = sqrt(norm(m0) * norm(m));
+length = sqrt(norm(m0) * norm(m));
 w = cross(m0,m);
-q = [m_norms + dot(m0,m); w];
-q = normalize(q);
+q = [length + dot(m0,m); w];
+%normalize(q);
+
 
 function dq = deltaQuaternion(q1,q0)
-normalize(q1);
-normalize(q0);
+%normalize(q1);
+%normalize(q0);
 q0c = [q0(1); -q0(2:4)];
 dq = quaternionMultiplication(q1,q0c);
 normalize(dq);
