@@ -375,15 +375,10 @@ else
     R = Eaa2rotMat(deg2rad(euler_angle), euler_axis);
 end
 
+qk = [cosd(euler_angle); sind(euler_angle*0.5)*euler_axis];
+transformAttitudes(qk,handles);
 
 handles.Cube = RedrawCube(R,handles.Cube);
-
-set(handles.euler_angle,'String', euler_angle);
-set(handles.euler_axis_x,'String', euler_axis(1));
-set(handles.euler_axis_y,'String', euler_axis(2));
-set(handles.euler_axis_z,'String', euler_axis(3));
-
-
             
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
