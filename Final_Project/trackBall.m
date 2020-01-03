@@ -56,16 +56,6 @@ set(hObject,'WindowButtonDownFcn',{@my_MouseClickFcn,handles.axes1});
 set(hObject,'WindowButtonUpFcn',{@my_MouseReleaseFcn,handles.axes1});
 axes(handles.axes1);
 
-%debug circle
-r = sqrt(3);
-x = 0;
-y = 0;
-th = 0:pi/50:2*pi;
-xunit = r * cos(th) + x;
-yunit = r * sin(th) + y;
-h = plot(xunit, yunit);
-hold on;
-
 handles.Cube=DrawCube(eye(3));
 hold off;
 
@@ -150,10 +140,7 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     
     % use with the proper R matrix to rotate the cube
     R = quaternion2RotationMatrix(qk);
-    t(1) = norm([R(1,1) R(1,2) R(1,3)]);
-    t(2) = norm([R(2,1) R(2,2) R(2,3)]);
-    t(3) = norm([R(3,1) R(3,2) R(3,3)]);
-    t
+    
     handles.Cube = RedrawCube(R,handles.Cube);
 
     handles.m0 = m;
@@ -820,7 +807,6 @@ length = sqrt(norm(m0) * norm(m));
 w = cross(m0,m);
 q = [length + dot(m0,m); w];
 
-
 function qp = quaternionMultiplication(q,p)
 qp = zeros(4,1);
 qp(1) = (q(1)*p(1)) - (q(2:4)'*p(2:4));
@@ -872,25 +858,28 @@ half_sin = sind(angle * 0.5);
 axis(1) = q(2) / half_sin;
 axis(2) = q(3) / half_sin;
 axis(3) = q(4) / half_sin;
+if angle == 0
+    axis = [1 0 0];
+end
 
 function [yaw, pitch, roll] = rotM2eAngles(R)
     %first we check the two special cases
     if round(R(3,1),6) == 1
-      pitch = pi * 1.5;
+      pitch = 270;
       roll = 0;
       yaw = R(2,2) -1;
     elseif round(R(3,1),6) == -1
-      pitch = pi* 0.5;
+      pitch = 90;
       roll = 0;
       yaw = 1 - R(2,2);
     elseif round(R(3,1),6) == 0
-       pitch = pi;
-       roll = atan2(R(3,2)/cos(pitch), R(3,3)/cos(pitch));
-       yaw = atan2(R(2,1)/cos(pitch), R(1,1)/cos(pitch));
+       pitch = 0;
+       roll = atan2d(R(3,2)/cosd(pitch), R(3,3)/cosd(pitch));
+       yaw = atan2d(R(2,1)/cosd(pitch), R(1,1)/cosd(pitch));
     else
-       pitch = asin(-R(3,1));
-       roll = atan2(R(3,2)/cos(pitch), R(3,3)/cos(pitch));
-       yaw = atan2(R(2,1)/cos(pitch), R(1,1)/cos(pitch));
+       pitch = asind(-R(3,1));
+       roll = atan2d(R(3,2)/cosd(pitch), R(3,3)/cosd(pitch));
+       yaw = atan2d(R(2,1)/cosd(pitch), R(1,1)/cosd(pitch));
     end
 
 function [R] = quaternion2RotationMatrix(q)
