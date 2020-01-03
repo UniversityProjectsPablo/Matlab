@@ -362,6 +362,8 @@ else
     R = Eaa2rotMat(deg2rad(euler_angle), euler_axis);
 end
 
+qk = [cosd(euler_angle); sind(euler_angle*0.5)*euler_axis];
+transformAttitudes(qk,handles);
 
 handles.Cube = RedrawCube(R,handles.Cube);
 
