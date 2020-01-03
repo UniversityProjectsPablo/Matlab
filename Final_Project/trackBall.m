@@ -140,12 +140,13 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     q0 = handles.q0;
         
     m = calculateM([xmouse; ymouse]);
-
+    
     dq = quaternionFromVectors(m0,m);
     dq = dq/norm(dq);
     
+    
     qk = quaternionMultiplication(dq,q0);
-
+    
     transformAttitudes(qk, handles);
     
     % use with the proper R matrix to rotate the cube
@@ -341,13 +342,14 @@ function quaternions_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%Quaternions
 handles.qk(1) = str2double(get(handles.q0_input,'String'));
 handles.qk(2) = str2double(get(handles.q1_input,'String'));
 handles.qk(3) = str2double(get(handles.q2_input,'String'));
 handles.qk(4) = str2double(get(handles.q3_input,'String'));
-
 qk = handles.qk;
 
+%Other attitudes
 transformAttitudes(qk,handles);
 
 R = quaternion2RotationMatrix(qk);
@@ -388,7 +390,6 @@ handles.euler_roll = str2double(get(handles.euler_roll, 'String'));
 
 %Rotation Matrix
 R = eAngles2rotM(handles.euler_yaw, handles.euler_pitch,handles.euler_roll);
-
 set(handles.rot_mat_1_1,'String',num2str(R(1,1)));
 set(handles.rot_mat_1_2,'String',num2str(R(1,2)));
 set(handles.rot_mat_1_3,'String',num2str(R(1,3)));
@@ -489,24 +490,29 @@ handles.v0 = ([0;0;0]);
 
 R = eye(3);
 
+%Quaternions
 set(handles.q0_input,'String', 0);
 set(handles.q1_input,'String', 0);
 set(handles.q2_input,'String', 0);
 set(handles.q3_input,'String', 0);
 
+%Euler angle axis
 set(handles.euler_axis_x,'String', 0);
 set(handles.euler_axis_y,'String', 0);
 set(handles.euler_axis_z,'String', 0);
 set(handles.euler_angle,'String', 0);
 
+%Euler Angles
 set(handles.euler_yaw,'String', 0);
 set(handles.euler_pitch,'String', 0);
 set(handles.euler_roll,'String', 0);
 
+%Rotation vector
 set(handles.rotVec_x,'String', 0);
 set(handles.rotVec_y,'String', 0);
 set(handles.rotVec_z,'String', 0);
 
+%Rotation Matrix
 set(handles.rot_mat_1_1,'String', 0);
 set(handles.rot_mat_1_2,'String', 0);
 set(handles.rot_mat_1_3,'String', 0);
@@ -519,6 +525,7 @@ set(handles.rot_mat_3_3,'String', 0);
 
 handles.Cube = RedrawCube(R,handles.Cube);
 
+
 function q1_input_Callback(hObject, eventdata, handles)
 % hObject    handle to q1_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -526,7 +533,6 @@ function q1_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of q1_input as text
 %        str2double(get(hObject,'String')) returns contents of q1_input as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function q1_input_CreateFcn(hObject, eventdata, handles)
@@ -539,8 +545,6 @@ function q1_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 function q2_input_Callback(hObject, eventdata, handles)
 % hObject    handle to q2_input (see GCBO)
@@ -585,8 +589,6 @@ function q3_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 function euler_pitch_Callback(hObject, eventdata, handles)
 % hObject    handle to euler_pitch (see GCBO)
@@ -815,11 +817,11 @@ length = sqrt(norm(m0) * norm(m));
 w = cross(m0,m);
 q = [length + dot(m0,m); w];
 
+
 function qp = quaternionMultiplication(q,p)
 qp = zeros(4,1);
 qp(1) = (q(1)*p(1)) - (q(2:4)'*p(2:4));
 qp(2:4) = q(1)*p(2:4) + p(1)*q(2:4) + cross(q(2:4),p(2:4));
-%normalize(qp);
 
 function transformAttitudes(qk, handles)
 
