@@ -356,21 +356,44 @@ euler_axis = [str2double(get(handles.euler_axis_x,'String'));
                 str2double(get(handles.euler_axis_y,'String'));
                 str2double(get(handles.euler_axis_z,'String'))];
 
+%Quaternions
+qk = [cosd(euler_angle); sind(euler_angle*0.5)*euler_axis];
+set(handles.q0_input,'String', qk(1));
+set(handles.q1_input,'String', qk(2));
+set(handles.q2_input,'String', qk(3));
+set(handles.q3_input,'String', qk(4));
+handles.q0 = qk;
+
+%Rotation vector
+set(handles.rotVec_x,'String', euler_axis(1)*euler_angle);
+set(handles.rotVec_y,'String', euler_axis(2)*euler_angle);
+set(handles.rotVec_z,'String', euler_axis(3)*euler_angle);
+
+%Rotation Matrix
 if euler_angle == 0 || (euler_axis(1) == 0 && euler_axis(2) == 0 && euler_axis(3) == 0)
     R = eye(3);
 else
-    R = Eaa2rotMat(deg2rad(euler_angle), euler_axis);
+    R = Eaa2rotMat(euler_angle, euler_axis);
 end
 
-qk = [cosd(euler_angle); sind(euler_angle*0.5)*euler_axis];
-transformAttitudes(qk,handles);
+set(handles.rot_mat_1_1,'String',num2str(R(1,1)));
+set(handles.rot_mat_1_2,'String',num2str(R(1,2)));
+set(handles.rot_mat_1_3,'String',num2str(R(1,3)));
+set(handles.rot_mat_2_1,'String',num2str(R(2,1)));
+set(handles.rot_mat_2_2,'String',num2str(R(2,2)));
+set(handles.rot_mat_2_3,'String',num2str(R(2,3)));
+set(handles.rot_mat_3_1,'String',num2str(R(3,1)));
+set(handles.rot_mat_3_2,'String',num2str(R(3,2)));
+set(handles.rot_mat_3_3,'String',num2str(R(3,3)));
+
+%Euler angles
+[yaw, pitch, roll] = rotM2eAngles(R);
+set(handles.euler_yaw,'String',num2str(yaw));
+set(handles.euler_pitch,'String',num2str(pitch));
+set(handles.euler_roll,'String',num2str(roll));
 
 handles.Cube = RedrawCube(R,handles.Cube);
 
-set(handles.euler_angle,'String', euler_angle);
-set(handles.euler_axis_x,'String', euler_axis(1));
-set(handles.euler_axis_y,'String', euler_axis(2));
-set(handles.euler_axis_z,'String', euler_axis(3));
             
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
@@ -914,7 +937,7 @@ u = u/sqrt(u'*u);
         u(3), 0, -u(1);
         -u(2) u(1) 0];
 
-R = eye(3)*cos(a) + (1 - cos(a))*(u *u') + ux*sin(a);
+R = eye(3)*cosd(a) + (1 - cosd(a))*(u *u') + ux*sind(a);
 
 function [R] = eAngles2rotM(yaw, pitch, roll)
 sin_pitch = sind(pitch);

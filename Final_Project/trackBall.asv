@@ -363,9 +363,14 @@ else
 end
 
 qk = [cosd(euler_angle); sind(euler_angle*0.5)*euler_axis];
-transformAttitudes(qk,handles);
+%transformAttitudes(qk,handles);
 
 handles.Cube = RedrawCube(R,handles.Cube);
+
+set(handles.euler_angle,'String', euler_angle);
+set(handles.euler_axis_x,'String', euler_axis(1));
+set(handles.euler_axis_y,'String', euler_axis(2));
+set(handles.euler_axis_z,'String', euler_axis(3));
             
 % --- Executes on button press in euler_angles_button.
 function euler_angles_button_Callback(hObject, eventdata, handles)
@@ -858,7 +863,9 @@ half_sin = sind(angle * 0.5);
 axis(1) = q(2) / half_sin;
 axis(2) = q(3) / half_sin;
 axis(3) = q(4) / half_sin;
-
+if angle == 0
+    axis = [1 0 0];
+end
 
 function [yaw, pitch, roll] = rotM2eAngles(R)
     %first we check the two special cases
