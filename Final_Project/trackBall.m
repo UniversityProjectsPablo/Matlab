@@ -145,8 +145,8 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
 
     handles.m0 = m;
     handles.q0 = qk;
-
 end
+
 guidata(hObject,handles);
 
 function h = DrawCube(R)
@@ -497,7 +497,7 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % handles.Cube=DrawCube(eye(3));
 m0=[0;0];
-m0 = calculateM(m0);
+% m0 = calculateM(m0);
 handles.m0 = m0;
 handles.m = m0;
 
@@ -542,7 +542,6 @@ set(handles.rot_mat_3_2,'String', 0);
 set(handles.rot_mat_3_3,'String', 0);
 
 handles.Cube = RedrawCube(R,handles.Cube);
-
 
 function q1_input_Callback(hObject, eventdata, handles)
 % hObject    handle to q1_input (see GCBO)
