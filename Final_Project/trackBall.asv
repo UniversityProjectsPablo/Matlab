@@ -310,6 +310,7 @@ function rotation_vector_input_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of rotation_vector_input as text
 %        str2double(get(hObject,'String')) returns contents of rotation_vector_input as a double
 
+
 % --- Executes during object creation, after setting all properties.
 function rotation_vector_input_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to rotation_vector_input (see GCBO)
@@ -321,6 +322,7 @@ function rotation_vector_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
 
 % --- Executes on button press in quaternions_button.
 function quaternions_button_Callback(hObject, eventdata, handles)
@@ -435,6 +437,8 @@ set(handles.q3_input,'String', qk(4));
 handles.q0 = qk;
 
 handles.Cube = RedrawCube(R,handles.Cube);
+
+
 
 % --- Executes on button press in rotation_vector_button.
 function rotation_vector_button_Callback(hObject, eventdata, handles)
