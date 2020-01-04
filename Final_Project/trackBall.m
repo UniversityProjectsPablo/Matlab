@@ -357,7 +357,7 @@ euler_axis = [str2double(get(handles.euler_axis_x,'String'));
                 str2double(get(handles.euler_axis_z,'String'))];
 
 %Quaternions
-qk = [cosd(euler_angle); sind(euler_angle*0.5)*euler_axis];
+qk = [cosd(euler_angle*0.5); sind(euler_angle*0.5)*euler_axis];
 set(handles.q0_input,'String', qk(1));
 set(handles.q1_input,'String', qk(2));
 set(handles.q2_input,'String', qk(3));
@@ -905,7 +905,7 @@ function [yaw, pitch, roll] = rotM2eAngles(R)
        roll = atan2d(R(3,2)/cosd(pitch), R(3,3)/cosd(pitch));
        yaw = atan2d(R(2,1)/cosd(pitch), R(1,1)/cosd(pitch));
     else
-       pitch = asind(-R(3,1));
+       pitch = asind(R(3,1));
        roll = atan2d(R(3,2)/cosd(pitch), R(3,3)/cosd(pitch));
        yaw = atan2d(R(2,1)/cosd(pitch), R(1,1)/cosd(pitch));
     end
@@ -921,7 +921,6 @@ Ux = [0 -vec(3) vec(2); vec(3) 0 -vec(1); -vec(2) vec(1) 0];
 
 vec_normalized = norm(vec);
 if vec_normalized ~= 0
-    % Formula divided into different lines to make it more legible
     R = eye(3) * cosd(vec_normalized);
     R = R + ((1 - cosd(vec_normalized)) / vec_normalized ^ 2) * (vec * vec');
     R = R + (sind(vec_normalized) / vec_normalized) * Ux;
