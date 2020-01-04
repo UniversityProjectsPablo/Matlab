@@ -496,7 +496,7 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % handles.Cube=DrawCube(eye(3));
-m0=[0;0];
+m0=[0;0;0];
 % m0 = calculateM(m0);
 handles.m0 = m0;
 handles.m = m0;
