@@ -57,6 +57,7 @@ set(hObject,'WindowButtonUpFcn',{@my_MouseReleaseFcn,handles.axes1});
 axes(handles.axes1);
 
 handles.Cube=DrawCube(eye(3));
+handles.OriginalCube = handles.Cube;
 hold off;
 
 m0=[0;0];
@@ -168,11 +169,11 @@ z = M(:,3);
 
 
 con = [1 2 3 4;
-    5 6 7 8;
-    4 3 7 8;
-    1 2 6 5;
-    1 4 8 5;
-    2 3 7 6]';
+       5 6 7 8;
+       4 3 7 8;
+       1 2 6 5;
+       1 4 8 5;
+       2 3 7 6]';
 
 x = reshape(x(con(:)),[4,6]);
 y = reshape(y(con(:)),[4,6]);
@@ -201,14 +202,14 @@ c = 1/255*[255 248 88;
     255 178 0;
     255 0 0];
 
-M0 = [    -1  -1 1;   %Node 1
-    -1   1 1;   %Node 2
-    1   1 1;   %Node 3
-    1  -1 1;   %Node 4
-    -1  -1 -1;  %Node 5
-    -1   1 -1;  %Node 6
-    1   1 -1;  %Node 7
-    1  -1 -1]; %Node 8
+M0 = [-1  -1  1;   %Node 1
+      -1   1  1;   %Node 2
+       1   1  1;   %Node 3
+       1  -1  1;   %Node 4
+      -1  -1 -1;  %Node 5
+      -1   1 -1;  %Node 6
+       1   1 -1;  %Node 7
+       1  -1 -1]; %Node 8
 
 M = (R*M0')';
 
@@ -310,7 +311,6 @@ function rotation_vector_input_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of rotation_vector_input as text
 %        str2double(get(hObject,'String')) returns contents of rotation_vector_input as a double
 
-
 % --- Executes during object creation, after setting all properties.
 function rotation_vector_input_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to rotation_vector_input (see GCBO)
@@ -322,7 +322,6 @@ function rotation_vector_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
 
 % --- Executes on button press in quaternions_button.
 function quaternions_button_Callback(hObject, eventdata, handles)
@@ -438,8 +437,6 @@ handles.q0 = qk;
 
 handles.Cube = RedrawCube(R,handles.Cube);
 
-
-
 % --- Executes on button press in rotation_vector_button.
 function rotation_vector_button_Callback(hObject, eventdata, handles)
 % hObject    handle to rotation_vector_button (see GCBO)
@@ -539,6 +536,7 @@ set(handles.rot_mat_3_1,'String', 0);
 set(handles.rot_mat_3_2,'String', 0);
 set(handles.rot_mat_3_3,'String', 0);
 
+handles.Cube = handles.OriginalCube;
 handles.Cube = RedrawCube(R,handles.Cube);
 
 function q1_input_Callback(hObject, eventdata, handles)

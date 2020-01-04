@@ -57,7 +57,7 @@ set(hObject,'WindowButtonUpFcn',{@my_MouseReleaseFcn,handles.axes1});
 axes(handles.axes1);
 
 handles.Cube=DrawCube(eye(3));
-hold off;
+handles.OriginalCube = handles.Cube;
 
 m0=[0;0];
 m0 = calculateM(m0);
@@ -65,7 +65,7 @@ handles.m0 = m0;
 handles.m = m0;
 
 handles.q0 = [1;0;0;0];
-
+%origin
 set(handles.axes1,'CameraPosition',...
     [0 0 5],'CameraTarget',...
     [0 0 -5],'CameraUpVector',...
@@ -168,11 +168,11 @@ z = M(:,3);
 
 
 con = [1 2 3 4;
-    5 6 7 8;
-    4 3 7 8;
-    1 2 6 5;
-    1 4 8 5;
-    2 3 7 6]';
+       5 6 7 8;
+       4 3 7 8;
+       1 2 6 5;
+       1 4 8 5;
+       2 3 7 6]';
 
 x = reshape(x(con(:)),[4,6]);
 y = reshape(y(con(:)),[4,6]);
@@ -201,14 +201,14 @@ c = 1/255*[255 248 88;
     255 178 0;
     255 0 0];
 
-M0 = [    -1  -1 1;   %Node 1
-    -1   1 1;   %Node 2
-    1   1 1;   %Node 3
-    1  -1 1;   %Node 4
-    -1  -1 -1;  %Node 5
-    -1   1 -1;  %Node 6
-    1   1 -1;  %Node 7
-    1  -1 -1]; %Node 8
+M0 = [-1  -1  1;   %Node 1
+      -1   1  1;   %Node 2
+       1   1  1;   %Node 3
+       1  -1  1;   %Node 4
+      -1  -1 -1;  %Node 5
+      -1   1 -1;  %Node 6
+       1   1 -1;  %Node 7
+       1  -1 -1]; %Node 8
 
 M = (R*M0')';
 
@@ -489,18 +489,15 @@ function general_reset_button_Callback(hObject, eventdata, handles)
 % hObject    handle to general_reset_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% handles.Cube=DrawCube(eye(3));
-m0=[0;0;0];
-% m0 = calculateM(m0);
+
+m0=[0;0];
+m0 = calculateM(m0);
 handles.m0 = m0;
 handles.m = m0;
 
 handles.q0 = [1;0;0;0];
 handles.qk = [1;0;0;0];
-
 handles.v0 = ([0;0;0]);
-
-R = eye(3);
 
 %Quaternions
 set(handles.q0_input,'String', 0);
@@ -535,7 +532,9 @@ set(handles.rot_mat_3_1,'String', 0);
 set(handles.rot_mat_3_2,'String', 0);
 set(handles.rot_mat_3_3,'String', 0);
 
+R = eye(3);
 handles.Cube = RedrawCube(R,handles.Cube);
+guidata(hObject, handles);
 
 function q1_input_Callback(hObject, eventdata, handles)
 % hObject    handle to q1_input (see GCBO)
