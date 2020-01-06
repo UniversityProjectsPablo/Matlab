@@ -468,6 +468,9 @@ set(handles.euler_roll,'String', num2str(roll));
 %Euler angle axis
 u = vec/norm(vec);
 a = norm(vec);
+if norm(vec) == 0
+    u = [1;0;0];
+end
 set(handles.euler_axis_x,'String', u(1));
 set(handles.euler_axis_y,'String', u(2));
 set(handles.euler_axis_z,'String', u(3));
@@ -499,7 +502,7 @@ handles.qk = [1;0;0;0];
 handles.v0 = ([0;0;0]);
 
 %Quaternions
-set(handles.q0_input,'String', 0);
+set(handles.q0_input,'String', 1);
 set(handles.q1_input,'String', 0);
 set(handles.q2_input,'String', 0);
 set(handles.q3_input,'String', 0);
@@ -521,15 +524,15 @@ set(handles.rotVec_y,'String', 0);
 set(handles.rotVec_z,'String', 0);
 
 %Rotation Matrix
-set(handles.rot_mat_1_1,'String', 0);
+set(handles.rot_mat_1_1,'String', 1);
 set(handles.rot_mat_1_2,'String', 0);
 set(handles.rot_mat_1_3,'String', 0);
 set(handles.rot_mat_2_1,'String', 0);
-set(handles.rot_mat_2_2,'String', 0);
+set(handles.rot_mat_2_2,'String', 1);
 set(handles.rot_mat_2_3,'String', 0);
 set(handles.rot_mat_3_1,'String', 0);
 set(handles.rot_mat_3_2,'String', 0);
-set(handles.rot_mat_3_3,'String', 0);
+set(handles.rot_mat_3_3,'String', 1);
 
 R = eye(3);
 handles.Cube = RedrawCube(R,handles.Cube);
